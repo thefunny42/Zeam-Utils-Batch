@@ -10,7 +10,9 @@ install_requires=[
     'zope.annotation',
     'zope.traversing',
     'zope.app.pagetemplate',
-    'zope.cachedescriptors',
+    'grokcore.view',
+    'grokcore.component',
+    'megrok.pagetemplate',
     ]
 
 tests_requires = install_requires + [
@@ -18,7 +20,6 @@ tests_requires = install_requires + [
     'zope.app.testing',
     'zope.app.securitypolicy',
     'zope.app.zcmlfiles',
-    'zope.app.zptpage',
     ],
 
 

@@ -1,14 +1,13 @@
 # Copyright Sylvain Viollon 2008 (c)
 # $Id: batch.py 94 2008-10-20 22:20:34Z sylvain $
 
+from interfaces import IBatch
 from zope.interface import implements
 
-from interfaces import IBatch
 
 class batchBaseIterator(object):
     """An iterator on batch object.
     """
-
     def __init__(self, context):
         self.context = context
         self.start = 0
@@ -20,7 +19,6 @@ class batchBaseIterator(object):
 class batchItemIterator(batchBaseIterator):
     """Return the next object in the batch iterator.
     """
-
     def next(self):
         try:
             elt = self.context[self.start]
@@ -29,10 +27,10 @@ class batchItemIterator(batchBaseIterator):
         self.start += 1
         return elt
 
+
 class batchIndiceIterator(batchBaseIterator):
     """Return the next indice in the batch iterator.
     """
-
     def next(self):
         last = self.context.last
         if not last:
@@ -47,7 +45,6 @@ class batchIndiceIterator(batchBaseIterator):
 class batch(object):
     """A simple batch object.
     """
-
     implements(IBatch)
 
     def __init__(self, collection, start=0, count=10, name='', request=None):

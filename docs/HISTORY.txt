@@ -4,20 +4,25 @@ Changelog
 0.4 (unreleased)
 ----------------
 
-* You adapt the batch with the view on which you display the batch:
-  its name will keep when generating links,
-* Batch can be *disabled* with a count of 0,
-* Add translations for french, english and dutch.
+  * The rendering is made by a IPageTemplate component, not longer by
+    the Batching itself. [trollfot]
+  * We no longer use the IBatchedContent. It has been removed. [trollfot]
+  * `zeam.utils.bacth` is now fully grokked. [trollfot]
+  * batchView has been renamed Batching. [trollfot]
+  * You adapt the batch with the view on which you display the batch:
+    its name will keep when generating links,
+  * Batch can be *disabled* with a count of 0,
+  * Add translations for french, english and dutch.
 
 0.3 (2008/10/18)
 ----------------
 
-* Fix and add tests,
-* Don't display batch navigation if everything fits on one page,
-* No more special links are generated for the first page of the batch.
+  * Fix and add tests,
+  * Don't display batch navigation if everything fits on one page,
+  * No more special links are generated for the first page of the batch.
 
 0.2
 ---
 
-* Initial release
+  * Initial release
 

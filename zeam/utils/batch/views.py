@@ -1,44 +1,60 @@
 # Copyright Sylvain Viollon 2008 (c)
 # $Id: views.py 96 2008-10-20 22:25:04Z sylvain $
 
-from zope.interface import implements
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
-from zope.traversing.interfaces import ITraversable
-from zope.traversing.browser import absoluteURL
-
+import grokcore.viewlet as grok
 import zope.cachedescriptors.property
 
-from zeam.utils.batch.interfaces import IBatchView
+from grokcore.view import util
+from zope.interface import Interface, implements
+from zope.component import queryMultiAdapter
+from zope.traversing.browser import absoluteURL
+from zope.traversing.interfaces import ITraversable
+from zope.publisher.interfaces.http import IHTTPRequest
+from zope.cachedescriptors.property import CachedProperty
+from zeam.utils.batch.interfaces import IBatch, IBatching
+from zope.pagetemplate.interfaces import IPageTemplate
+from megrok.pagetemplate import PageTemplate
 
-class baseView(object):
 
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-
-class batchView(baseView):
+class Batching(grok.MultiAdapter):
     """View object on batched elements.
     """
-
-    implements(IBatchView)
-
-    render = ViewPageTemplateFile('templates/batch.pt')
+    grok.adapts(Interface, IBatch, IHTTPRequest)
+    grok.implements(IBatching)        
 
     def __init__(self, context, batch, request):
-        super(batchView, self).__init__(context, request)
+        self.context = context
+        self.request = request
         self._batch = batch
 
-    @zope.cachedescriptors.property.CachedProperty
-    def contextURL(self):
+    def __call__(self):
+        template = queryMultiAdapter((self, self.request), IPageTemplate)
+        if template is None:
+            return u""
+        return template()
+
+    @CachedProperty
+    def url(self):
         return absoluteURL(self.context, self.request)
 
     def _baseLink(self, position):
         if not position:
-            return self.contextURL
+            return self.url
 	if self._batch.name:
-	    base = '%s/++batch++%s+%d'
-	    return  base % (self.contextURL, self._batch.name, position)
-	return '%s/++batch++%d' % (self.contextURL, position)
+	    return "%s/++batch++%s+%d" % (self.url, self._batch.name, position) 
+        return "%s/++batch++%d" % (self.url, position)
+
+    def default_namespace(self):
+        namespace = {}
+        namespace['context'] = self.context
+        namespace['request'] = self.request
+        namespace['batch'] = self.batch
+        namespace['next'] = self.next
+        namespace['previous'] = self.next
+        return namespace
+
+    def namespace(self):
+        return {}
 
     @property
     def batch(self):
@@ -74,29 +90,17 @@ class batchView(baseView):
         avail = not (next is None)
         return avail and self._baseLink(next) or None
 
-    def __call__(self):
-        return self.render()
 
+class BatchPages(PageTemplate):
+    grok.view(Batching)
+    
 
-class batchNamedView(batchView):
-    """View on batched elements: keep the view name in generated
-    links.
-    """
-
-    def __init__(self, context, batch, request, view):
-        super(batchNamedView, self).__init__(context, batch, request)
-        self._view = view
-
-    def _baseLink(self, position):
-        link = super(batchNamedView, self)._baseLink(position)
-        return link + '/@@' + self._view.__name__
-
-
-class batchNamespace(baseView):
+class Namespace(grok.MultiAdapter):
     """Make batch works with namespace.
     """
-
-    implements(ITraversable)
+    grok.name('batch')
+    grok.provides(ITraversable)
+    grok.adapts(Interface, IHTTPRequest)
 
     def traverse(self, name, ignored):
 	if '+' in name:

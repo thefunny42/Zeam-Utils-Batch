@@ -27,9 +27,8 @@ options=(doctest.ELLIPSIS+
 def test_suite():
     batchs = DocFileSuite('batch.txt',
                           optionflags=options)
-    views = DocFileSuite(os.path.join('browser', 'views.txt'),
-                         globs=dict(http=HTTPCaller(),
-                                    getRootFolder=getRootFolder,
+    views = DocFileSuite('views.txt',
+                         globs=dict(getRootFolder=getRootFolder,
                                     sync=sync),
                          optionflags=options)
     views.layer = FunctionalLayer

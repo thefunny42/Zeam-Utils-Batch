@@ -1,0 +1,22 @@
+<div class="batchNav" i18n:domain="zeam">
+  <a href="#"
+     tal:attributes="href previous"
+     tal:condition="previous">
+    &lt; <tal:translate
+            i18n:translate="">Previous</tal:translate>
+  </a>
+  <tal:repeat repeat="item batch">
+  <a href="#" class="#"
+     tal:attributes="href item/url; class item/style"
+     tal:condition="item/url"
+     tal:content="item/name">
+  </a>
+  <span tal:condition="not: item/url" tal:replace="string:..." />
+  </tal:repeat>
+  <a href="#"
+     tal:attributes="href next"
+     tal:condition="next">
+    <tal:translate
+       i18n:translate="">Next</tal:translate> &gt;
+  </a>
+</div>

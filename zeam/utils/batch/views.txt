@@ -1,22 +1,24 @@
 Batch navigation
 ----------------
 
+  >>> from grokcore.component import testing
+  >>> testing.grok("zeam.utils.batch")
+
 First we need a content to apply the batch on::
 
   >>> from zope.interface import implements
   >>> from persistent import Persistent
-  >>> from zeam.utils.batch.interfaces import IBatchedContent
+
   >>> class Content(Persistent):
-  ...    implements(IBatchedContent)
+  ...    pass
+
   >>> app = getRootFolder()
   >>> app['content'] = Content()
   >>> content = app['content']
-  >>> IBatchedContent.providedBy(content)
-  True
 
 After we need a batch::
 
-  >>> from zeam.utils.batch.batch import batch
+  >>> from zeam.utils.batch import batch
   >>> list_long = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
   >>> b = batch(list_long, count=4)
 
@@ -28,12 +30,13 @@ And a request::
 So we can get the view::
 
   >>> from zope.component import queryMultiAdapter
-  >>> from zeam.utils.batch.interfaces import IBatchView
-  >>> view = queryMultiAdapter((content, b, request), IBatchView)
-  >>> view
-  <zeam.utils.batch.browser.views.batchView object at ...>
-  >>> from zope.interface.verify import verifyObject
-  >>> verifyObject(IBatchView, view)
+  >>> from zeam.utils.batch.interfaces import IBatching
+  >>> view = queryMultiAdapter((content, b, request), IBatching)
+  >>> print view
+  <zeam.utils.batch.views.Batching object at ...>
+
+  >>> from zope.interface.verify import verifyObject  
+  >>> verifyObject(IBatching, view)
   True
 
 We are on the first page, start is 0::
@@ -50,7 +53,7 @@ We are on the first page, start is 0::
 We set start to 4::
 
   >>> b = batch(list_long, start=4, count=4)
-  >>> view = queryMultiAdapter((content, b, request), IBatchView)
+  >>> view = queryMultiAdapter((content, b, request), IBatching)
   >>> view.previous
   'http://127.0.0.1/content'
   >>> view.next
@@ -64,7 +67,7 @@ We set start to 4::
 We set start to 8, last page::
 
   >>> b = batch(list_long, start=8, count=4)
-  >>> view = queryMultiAdapter((content, b, request), IBatchView)
+  >>> view = queryMultiAdapter((content, b, request), IBatching)
   >>> view.previous
   'http://127.0.0.1/content/++batch++4'
   >>> view.next
@@ -77,7 +80,7 @@ We set start to 8, last page::
 Now we have less than one page::
 
   >>> b = batch(['a', 'b',], count=4)
-  >>> view = queryMultiAdapter((content, b, request), IBatchView)
+  >>> view = queryMultiAdapter((content, b, request), IBatching)
   >>> view.previous
   >>> view.next
   >>> for b in view.batch:
@@ -87,7 +90,7 @@ The number of item is modulo to the size of the batch::
 
   >>> list_short = [1, 2, 3, 4, 5, 6, 7, 8]
   >>> b = batch(list_short, start=4, count=4)
-  >>> view = queryMultiAdapter((content, b, request), IBatchView)
+  >>> view = queryMultiAdapter((content, b, request), IBatching)
   >>> view.previous
   'http://127.0.0.1/content'
   >>> view.next
@@ -99,7 +102,7 @@ The number of item is modulo to the size of the batch::
 If you put a name, it's inserted in the link::
 
   >>> b = batch(list_long, start=4, count=4, name='video')
-  >>> view = queryMultiAdapter((content, b, request), IBatchView)
+  >>> view = queryMultiAdapter((content, b, request), IBatching)
   >>> view.previous
   'http://127.0.0.1/content'
   >>> view.next
@@ -110,6 +113,29 @@ If you put a name, it's inserted in the link::
   {'url': 'http://127.0.0.1/content/++batch++video+4', 'style': 'current', 'name': 2}
   {'url': 'http://127.0.0.1/content/++batch++video+8', 'style': None, 'name': 3}
 
+
+Rendering
+----------
+
+  >>> print view()
+  <div class="batchNav">
+    <a href="http://127.0.0.1/content/++batch++video+8">
+      &lt; Previous
+    </a>
+  <BLANKLINE>
+    <a href="http://127.0.0.1/content">1</a>
+  <BLANKLINE>
+  <BLANKLINE>
+    <a href="http://127.0.0.1/content/++batch++video+4"
+       class="current">2</a>
+  <BLANKLINE>
+    <a href="http://127.0.0.1/content/++batch++video+8">3</a>
+  <BLANKLINE>
+  <BLANKLINE>
+    <a href="http://127.0.0.1/content/++batch++video+8">
+      Next &gt;
+    </a>
+  </div>
 
 Tear down:
 

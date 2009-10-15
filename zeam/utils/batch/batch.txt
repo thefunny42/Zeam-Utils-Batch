@@ -22,10 +22,9 @@ Now test access :
   4
   >>> b[4]
   Traceback (most recent call last):
-    File "<stdin>", line 1, in ?
-    File "/Users/sylvain/z8080/lib/python/utils/app/batch/batch.py", line 50, in __getitem__
-      raise IndexError, "invalid index"
+  ...
   IndexError: invalid index
+
   >>> for n in b:
   ...   print n
   1
