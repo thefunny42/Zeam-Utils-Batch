@@ -1,0 +1,2 @@
+recursive-include zeam/utils/batch *.txt *.py *.zcml
+recursive-include docs *.txt
