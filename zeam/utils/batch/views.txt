@@ -137,6 +137,26 @@ Rendering
     </a>
   </div>
 
+
+Traversing
+----------
+
+  >>> from zope.component import getMultiAdapter
+  >>> from zope.traversing.interfaces import ITraversable
+  >>> traverser = getMultiAdapter(
+  ...                 (content, request), ITraversable, name="batch")
+
+  >>> result = traverser.traverse('4', [])
+  >>> assert result is content
+  >>> request.form.get('bstart')
+  '4'
+  
+  >>> result = traverser.traverse('toto+6', [])
+  >>> assert result is content
+  >>> request.form.get('bstart_toto')
+  '6'
+
+
 Tear down:
 
   >>> sync()

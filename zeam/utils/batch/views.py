@@ -98,6 +98,10 @@ class Namespace(grok.MultiAdapter):
     grok.provides(ITraversable)
     grok.adapts(Interface, IHTTPRequest)
 
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
     def traverse(self, name, ignored):
 	if '+' in name:
 	    key, value = name.split('+')
