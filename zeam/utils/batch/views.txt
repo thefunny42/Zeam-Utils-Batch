@@ -119,7 +119,7 @@ Rendering
 
   >>> print view()
   <div class="batchNav">
-    <a href="http://127.0.0.1/content/++batch++video+8">
+    <a href="http://127.0.0.1/content">
       &lt; Previous
     </a>
   <BLANKLINE>
