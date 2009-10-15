@@ -26,8 +26,10 @@ tests_requires = install_requires + [
 setup(name='zeam.utils.batch',
       version=version,
       description="Generic Batch support for Zope",
-      long_description=open("README.txt").read() + "\n" +
-                       open(os.path.join("docs", "HISTORY.txt")).read(),
+      long_description= "%s\n\n%s" % (
+          open(os.path.join("zeam", "utils", "batch", "README.txt")).read(),
+          open(os.path.join("docs", "HISTORY.txt")).read()
+          ),
       classifiers=[
         "Framework :: Zope2",
         "Framework :: Zope3",

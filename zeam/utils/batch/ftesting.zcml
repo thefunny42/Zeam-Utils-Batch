@@ -4,8 +4,16 @@
    xmlns:browser="http://namespaces.zope.org/browser"
    i18n_domain="zope">
 
+  <include package="zope.component" file="meta.zcml"/>
+  <include package="zope.app.component" file="meta.zcml" />
+  <include package="grokcore.component" file="meta.zcml"/>
+  <include package="megrok.pagetemplate" file="meta.zcml"/>
+  <include package="grokcore.view" file="meta.zcml" />
   <include package="zope.app.zcmlfiles" file="meta.zcml" />
   <include package="zope.app.zcmlfiles" />
+  <include package="grokcore.view" />
   <include package="zeam.utils.batch" />
+
+  <grok:grok package="zeam.utils.batch.tests" />
 
 </configure>
