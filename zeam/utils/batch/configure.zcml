@@ -1,0 +1,16 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:i18n="http://namespaces.zope.org/i18n"
+   i18n_domain="zope">
+
+  <class class=".batch.batch">
+    <require permission="zope.Public"
+	     interface=".interfaces.IBatch"
+	     />
+  </class>
+
+  <i18n:registerTranslations directory="i18n" />
+
+  <include package=".browser" />
+
+</configure>

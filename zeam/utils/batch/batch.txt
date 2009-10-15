@@ -1,0 +1,117 @@
+Batch
+-----
+
+Batch support for Zope3 :
+
+  >>> from zeam.utils.batch.batch import batch
+  >>> l = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+  >>> b = batch(l, count=4)
+
+This verify the provided interface:
+
+  >>> from zope.interface.verify import verifyObject
+  >>> from zeam.utils.batch.interfaces import IBatch
+  >>> verifyObject(IBatch, b)
+  True
+
+Now test access :
+
+  >>> b[0]
+  1
+  >>> b[3]
+  4
+  >>> b[4]
+  Traceback (most recent call last):
+    File "<stdin>", line 1, in ?
+    File "/Users/sylvain/z8080/lib/python/utils/app/batch/batch.py", line 50, in __getitem__
+      raise IndexError, "invalid index"
+  IndexError: invalid index
+  >>> for n in b:
+  ...   print n
+  1
+  2
+  3
+  4
+
+Test a batch with a start value :
+
+  >>> b = batch(l, start=4, count=4)
+
+And access on it :
+
+  >>> b[0]
+  5
+  >>> b[3]
+  8
+  >>> b[4]
+  Traceback (most recent call last):
+    File "<stdin>", line 1, in ?
+    File "utils/app/batch/batch.py", line 50, in __getitem__
+      raise IndexError, "invalid index"
+  IndexError: invalid index
+
+
+Negative index are forbidden :
+
+  >>> b[-1]
+  Traceback (most recent call last):
+    File "<stdin>", line 1, in ?
+    File "utils/app/batch/batch.py", line 50, in __getitem__
+      raise IndexError, "invalid index"
+  IndexError: invalid index
+
+And test iterator on this one :
+
+  >>> for n in b:
+  ...   print n
+  5
+  6
+  7
+  8
+
+Test batch methods :
+
+  >>> b.first
+  0
+  >>> b.last
+  12
+  >>> for i in b.all():
+  ...   print i
+  (0, 1)
+  (4, 2)
+  (8, 3)
+  >>> b.batchLen()
+  3
+
+Test end of list iteration :
+
+  >>> b = batch(l, start=8, count=4)
+  >>> for n in b:
+  ...   print n
+  9
+  0
+
+Test empty batch :
+
+  >>> b = batch([])
+  >>> for n in b.all():
+  ...   print n
+  >>> b.first
+  0
+  >>> b.last
+  0
+  >>> b.batchLen()
+  0
+
+And a batch with one element:
+
+  >>> b = batch(['a',])
+  >>> for n in b.all():
+  ...   print n
+  (0, 1)
+  >>> b.first
+  0
+  >>> b.last
+  10
+  >>> b.batchLen()
+  1

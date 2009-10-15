@@ -1,0 +1,8 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   i18n_domain="zope">
+
+  <include package="zope.app.testing" file="ftesting.zcml" />
+  <include package="zeam.utils.batch" />
+
+</configure>
