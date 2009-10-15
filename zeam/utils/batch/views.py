@@ -1,19 +1,15 @@
 # Copyright Sylvain Viollon 2008 (c)
 # $Id: views.py 96 2008-10-20 22:25:04Z sylvain $
 
-import grokcore.viewlet as grok
-import zope.cachedescriptors.property
+import megrok.pagetemplate
+import grokcore.component as grok
 
-from grokcore.view import util
-from zope.interface import Interface, implements
-from zope.component import queryMultiAdapter
+from zope.interface import Interface
 from zope.traversing.browser import absoluteURL
 from zope.traversing.interfaces import ITraversable
 from zope.publisher.interfaces.http import IHTTPRequest
 from zope.cachedescriptors.property import CachedProperty
 from zeam.utils.batch.interfaces import IBatch, IBatching
-from zope.pagetemplate.interfaces import IPageTemplate
-from megrok.pagetemplate import PageTemplate
 
 
 class Batching(grok.MultiAdapter):
@@ -28,7 +24,7 @@ class Batching(grok.MultiAdapter):
         self._batch = batch
 
     def __call__(self):
-        template = queryMultiAdapter((self, self.request), IPageTemplate)
+        template = megrok.pagetemplate.getPageTemplate(self, self.request)
         if template is None:
             return u""
         return template()
@@ -91,8 +87,8 @@ class Batching(grok.MultiAdapter):
         return avail and self._baseLink(next) or None
 
 
-class BatchPages(PageTemplate):
-    grok.view(Batching)
+class BatchPages(megrok.pagetemplate.PageTemplate):
+    megrok.pagetemplate.view(Batching)
     
 
 class Namespace(grok.MultiAdapter):

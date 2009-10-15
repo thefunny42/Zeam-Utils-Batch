@@ -12,7 +12,7 @@ install_requires=[
     'zope.app.pagetemplate',
     'grokcore.view',
     'grokcore.component',
-    'megrok.pagetemplate',
+    'megrok.pagetemplate>=0.3',
     ]
 
 tests_requires = install_requires + [
