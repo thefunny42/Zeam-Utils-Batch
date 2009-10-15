@@ -46,7 +46,7 @@ class Batching(grok.MultiAdapter):
         namespace['request'] = self.request
         namespace['batch'] = self.batch
         namespace['next'] = self.next
-        namespace['previous'] = self.next
+        namespace['previous'] = self.previous
         return namespace
 
     def namespace(self):
