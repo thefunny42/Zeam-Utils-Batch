@@ -2,9 +2,15 @@
 zeam.utils.batch
 ================
 
-This package provides a batch functionality for Zope 2 and Zope 3.
+This package provides a batch functionality for Zope 2, Zope 3 and Grok.
 
-A very straightforward example::
+.. contents::
+
+Example
+=======
+
+A very straightforward example. We need to define a context to work
+on::
 
   >>> import grokcore.view as grok
   >>> from persistent import Persistent
@@ -14,6 +20,9 @@ A very straightforward example::
 
   >>> class Content(Persistent):
   ...     pass
+
+
+And now, you can define a view which use a batch, and render it::
 
   >>> class MyViewClass(grok.View):
   ...     grok.context(Content)
@@ -33,6 +42,8 @@ A very straightforward example::
   ...     <tal:navigation tal:replace="structure view/batch" />
   ...     ''')
 
+And this work::
+
   >>> from grokcore.component import testing
   >>> testing.grok_component("view", MyViewClass)
   True
@@ -43,7 +54,31 @@ A very straightforward example::
   >>> root = getRootFolder()
   >>> root['myObject'] = Content()
   >>> myobj = root['myObject']
- 
+
   >>> view = queryMultiAdapter((myobj, request), name="myviewclass")
   >>> "batchNav" in view()
   True
+
+
+API
+===
+
+``batch``
+   This object implement the batch.
+
+   You create him by giving him a list of objects, and a request, a
+   count of object (and potentially a name for your batch).
+
+   Afterwards, you will have an iterable object, that you can access
+   as a list as well, which gives you access to *only* the current
+   object to work on for this page of the batch.
+
+   You can get as well the number of pages of the batch, where you are
+   and so on. Please refer to the interface, inside the package, for
+   more information.
+
+   You can render your batch by adapting your context, your batch
+   object and request to an ``IBatching``. That will give you a piece
+   of HTML to include on your view to control the batch.
+
+
