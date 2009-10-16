@@ -64,21 +64,23 @@ API
 ===
 
 ``batch``
-   This object implement the batch.
+   This object implements the batch.
 
-   You create him by giving him a list of objects, and a request, a
-   count of object (and potentially a name for your batch).
+   The batch object is instanciated with the following arguments:
 
-   Afterwards, you will have an iterable object, that you can access
-   as a list as well, which gives you access to *only* the current
-   object to work on for this page of the batch.
+   - a list of the objects to batch
+   - the request
+   - the number of items per page
+   - a name (optional)
 
-   You can get as well the number of pages of the batch, where you are
-   and so on. Please refer to the interface, inside the package, for
-   more information.
+   The batch is an iterable object behaving like a list.
+   It only gives access to the set of objects for the current page.
 
-   You can render your batch by adapting your context, your batch
-   object and request to an ``IBatching``. That will give you a piece
-   of HTML to include on your view to control the batch.
+   It provides the number of pages generated and the current position.
+   Please refer to the interface, for more information.
 
-
+   A multi adapter providing ``IBatching`` can render the batch.
+   It adapts the context, the batch object and the request. The __call__
+   method of this component will return a snippet of HTML containing
+   basic controls for your batch: a next and previous link and a direct
+   access to the other pages.
