@@ -3,8 +3,7 @@
      tal:attributes="href previous"
      tal:condition="previous">
     &lt; <tal:translate
-            i18n:translate="">Previous</tal:translate>
-  </a>
+            i18n:translate="">Previous</tal:translate></a>
   <tal:repeat repeat="item batch">
   <a href="#" class="#"
      tal:attributes="href item/url; class item/style"
