@@ -4,11 +4,12 @@
 import megrok.pagetemplate
 import grokcore.component as grok
 
+from zope.cachedescriptors.property import CachedProperty
 from zope.interface import Interface
+from zope.publisher.interfaces.http import IHTTPRequest
 from zope.traversing.browser import absoluteURL
 from zope.traversing.interfaces import ITraversable
-from zope.publisher.interfaces.http import IHTTPRequest
-from zope.cachedescriptors.property import CachedProperty
+
 from zeam.utils.batch.interfaces import IBatch, IBatching
 
 
@@ -16,7 +17,8 @@ class Batching(grok.MultiAdapter):
     """View object on batched elements.
     """
     grok.adapts(Interface, IBatch, IHTTPRequest)
-    grok.implements(IBatching)        
+    grok.implements(IBatching)
+    grok.provides(IBatching)
 
     def __init__(self, context, batch, request):
         self.context = context
@@ -36,8 +38,8 @@ class Batching(grok.MultiAdapter):
     def _baseLink(self, position):
         if not position:
             return self.url
-	if self._batch.name:
-	    return "%s/++batch++%s+%d" % (self.url, self._batch.name, position) 
+        if self._batch.name:
+            return "%s/++batch++%s+%d" % (self.url, self._batch.name, position)
         return "%s/++batch++%d" % (self.url, position)
 
     def default_namespace(self):
@@ -89,7 +91,7 @@ class Batching(grok.MultiAdapter):
 
 class BatchPages(megrok.pagetemplate.PageTemplate):
     megrok.pagetemplate.view(Batching)
-    
+
 
 class Namespace(grok.MultiAdapter):
     """Make batch works with namespace.
@@ -103,11 +105,11 @@ class Namespace(grok.MultiAdapter):
         self.request = request
 
     def traverse(self, name, ignored):
-	if '+' in name:
-	    key, value = name.split('+')
-	    key = 'bstart_' + key
-	else:
-	    key = 'bstart'
-	    value = name
+        if '+' in name:
+            key, value = name.split('+')
+            key = 'bstart_' + key
+        else:
+            key = 'bstart'
+            value = name
         self.request.form[key] = value
         return self.context
