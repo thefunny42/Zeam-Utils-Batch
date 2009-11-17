@@ -35,7 +35,7 @@ So we can get the view::
   >>> print view
   <zeam.utils.batch.views.Batching object at ...>
 
-  >>> from zope.interface.verify import verifyObject  
+  >>> from zope.interface.verify import verifyObject
   >>> verifyObject(IBatching, view)
   True
 
@@ -120,8 +120,7 @@ Rendering
   >>> print view()
   <div class="batchNav">
     <a href="http://127.0.0.1/content">
-      &lt; Previous
-    </a>
+      &lt; Previous</a>
   <BLANKLINE>
     <a href="http://127.0.0.1/content">1</a>
   <BLANKLINE>
@@ -150,7 +149,7 @@ Traversing
   >>> assert result is content
   >>> request.form.get('bstart')
   '4'
-  
+
   >>> result = traverser.traverse('toto+6', [])
   >>> assert result is content
   >>> request.form.get('bstart_toto')
