@@ -1,10 +1,11 @@
 Changelog
 =========
 
-0.5 (UNRELEASED)
+0.5 (2009/11/17)
 ----------------
 
-* ...
+* Batching views have two new properties: ``first`` and ``last`` which
+  gives links to the first and last batch.
 
 0.4.1 (2009/10/16)
 ------------------

@@ -50,6 +50,13 @@ We are on the first page, start is 0::
   {'url': 'http://127.0.0.1/content/++batch++4', 'style': None, 'name': 2}
   {'url': 'http://127.0.0.1/content/++batch++8', 'style': None, 'name': 3}
 
+We can links to first set of elements and the last:
+
+  >>> view.first
+  'http://127.0.0.1/content'
+  >>> view.last
+  'http://127.0.0.1/content/++batch++8'
+
 We set start to 4::
 
   >>> b = batch(list_long, start=4, count=4)
@@ -63,6 +70,11 @@ We set start to 4::
   {'url': 'http://127.0.0.1/content', 'style': None, 'name': 1}
   {'url': 'http://127.0.0.1/content/++batch++4', 'style': 'current', 'name': 2}
   {'url': 'http://127.0.0.1/content/++batch++8', 'style': None, 'name': 3}
+
+  >>> view.first
+  'http://127.0.0.1/content'
+  >>> view.last
+  'http://127.0.0.1/content/++batch++8'
 
 We set start to 8, last page::
 
@@ -86,6 +98,11 @@ Now we have less than one page::
   >>> for b in view.batch:
   ...    print b
 
+  >>> view.first
+  'http://127.0.0.1/content'
+  >>> view.last
+  'http://127.0.0.1/content'
+
 The number of item is modulo to the size of the batch::
 
   >>> list_short = [1, 2, 3, 4, 5, 6, 7, 8]
@@ -98,6 +115,11 @@ The number of item is modulo to the size of the batch::
   ...    print b
   {'url': 'http://127.0.0.1/content', 'style': None, 'name': 1}
   {'url': 'http://127.0.0.1/content/++batch++4', 'style': 'current', 'name': 2}
+
+  >>> view.first
+  'http://127.0.0.1/content'
+  >>> view.last
+  'http://127.0.0.1/content/++batch++4'
 
 If you put a name, it's inserted in the link::
 

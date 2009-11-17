@@ -9,21 +9,21 @@ class IBatch(Interface):
     """A batch object.
     """
     start = schema.Int(
-	title=u"Starting indice over the batch"
+        title=u"Starting indice over the batch"
         )
-    
+
     count = schema.Int(
-	title=u"Number of element in a batch"
+        title=u"Number of element in a batch"
         )
-    
+
     data = schema.List(
-	title=u"Data to be batched"
+        title=u"Data to be batched"
         )
-    
+
     name = schema.TextLine(
-	title=u"Name of the batch",
-	required=False,
-	default=u""
+        title=u"Name of the batch",
+        required=False,
+        default=u""
         )
 
     first = Attribute("First element")
@@ -32,17 +32,17 @@ class IBatch(Interface):
     next = Attribute("Next index or None")
 
     def __getitem__(index):
-	"""Return item at index.
-	"""
+        """Return item at index.
+        """
 
     def __iter__():
-	"""Returns an iterator on batched content.
-	"""
+        """Returns an iterator on batched content.
+        """
 
     def all():
-	"""Returns an interator on all (index, starting element) of the
-	batch.
-	"""
+        """Returns an interator on all (index, starting element) of the
+        batch.
+        """
 
     def batchLen():
         """Returns the number of available index in the batch.
@@ -54,4 +54,6 @@ class IBatching(Interface):
     """
     next = Attribute("Link to the next page or None")
     previous = Attribute("Link to the previous page or None")
+    first = Attribute("Link to the first page")
+    last = Attribute("Link to the last page")
     batch = Attribute("List of links to each page, which is current")

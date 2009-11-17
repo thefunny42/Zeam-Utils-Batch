@@ -88,6 +88,14 @@ class Batching(grok.MultiAdapter):
         avail = not (next is None)
         return avail and self._baseLink(next) or None
 
+    @property
+    def first(self):
+        return self._baseLink(self._batch.first)
+
+    @property
+    def last(self):
+        return self._baseLink(self._batch.last)
+
 
 class BatchPages(megrok.pagetemplate.PageTemplate):
     megrok.pagetemplate.view(Batching)

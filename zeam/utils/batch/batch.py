@@ -32,7 +32,7 @@ class batchIndiceIterator(batchBaseIterator):
     """Return the next indice in the batch iterator.
     """
     def next(self):
-        last = self.context.last
+        last = self.context.count * self.context.batchLen()
         if not last:
             raise StopIteration
         if self.start < last:
@@ -103,12 +103,15 @@ class batch(object):
 
     @property
     def last(self):
-        return self.batchLen() * self.count
+        len = self.batchLen()
+        if not len:
+            return 0
+        return (len - 1) * self.count
 
     @property
     def next(self):
         next = self.start + self.count
-        if next >= self.last:
+        if next >= (self.count * self.batchLen()):
             return None
         return next
 

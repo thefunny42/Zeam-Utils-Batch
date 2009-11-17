@@ -73,7 +73,7 @@ Test batch methods :
   >>> b.first
   0
   >>> b.last
-  12
+  8
   >>> for i in b.all():
   ...   print i
   (0, 1)
@@ -111,6 +111,21 @@ And a batch with one element:
   >>> b.first
   0
   >>> b.last
-  10
+  0
   >>> b.batchLen()
   1
+
+A batch with a n element, n being count + 1:
+
+  >>> b = batch(['a', 'b', 'c', 'd', 'e'], count=2)
+  >>> for n in b.all():
+  ...   print n
+  (0, 1)
+  (2, 2)
+  (4, 3)
+  >>> b.first
+  0
+  >>> b.last
+  4
+  >>> b.batchLen()
+  3
