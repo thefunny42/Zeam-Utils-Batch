@@ -48,15 +48,15 @@ class batch(object):
     implements(IBatch)
 
     def __init__(self, collection, start=0, count=10, name='', request=None):
-	if not (request is None):
-	    key = 'bstart'
-	    if name:
-		key += '_' + name
-	    start = int(request.form.get(key, 0))
+        if not (request is None):
+            key = 'bstart'
+            if name:
+                key += '_' + name
+            start = int(request.form.get(key, 0))
         self.start = start
         self.count = count
         self.data = collection
-	self.name = name
+        self.name = name
 
     def _setData(self, data):
         self._data = data
