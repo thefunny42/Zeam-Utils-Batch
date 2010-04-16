@@ -129,3 +129,10 @@ A batch with a n element, n being count + 1:
   4
   >>> b.batchLen()
   3
+
+A batch that will be used by the iterator to wrapper each element
+
+  >>> b = batch(['a', 'b', 'c', 'd', 'e'], count=2, factory=lambda x: x*2)
+  >>> list(b)
+  ['aa', 'bb']
+

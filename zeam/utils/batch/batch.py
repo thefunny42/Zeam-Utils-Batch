@@ -17,11 +17,21 @@ class batchBaseIterator(object):
 
 
 class batchItemIterator(batchBaseIterator):
+
+    def __init__(self, context, factory=None):
+        super(batchItemIterator, self).__init__(context)
+        self.factory = factory
+
     """Return the next object in the batch iterator.
     """
     def next(self):
         try:
-            elt = self.context[self.start]
+            def fetch():
+                return self.context[self.start]
+            if self.factory is not None:
+                elt = self.factory(fetch())
+            else:
+                elt = fetch()
         except IndexError:
             raise StopIteration
         self.start += 1
@@ -47,7 +57,8 @@ class batch(object):
     """
     implements(IBatch)
 
-    def __init__(self, collection, start=0, count=10, name='', request=None):
+    def __init__(self, collection, start=0, count=10, name='',
+        request=None, factory=None):
         if not (request is None):
             key = 'bstart'
             if name:
@@ -57,6 +68,7 @@ class batch(object):
         self.count = count
         self.data = collection
         self.name = name
+        self.factory = factory
 
     def _setData(self, data):
         self._data = data
@@ -85,7 +97,7 @@ class batch(object):
         return (self._end / self.count) + last
 
     def __iter__(self):
-        return batchItemIterator(self)
+        return batchItemIterator(self, factory=self.factory)
 
     def all(self):
         return batchIndiceIterator(self)
