@@ -30,7 +30,8 @@ And now, you can define a view which use a batch, and render it::
   ...     def update(self):
   ...          fulllist = [1, 2, 3, 4, 5, 6, 7, 8, 9]
   ...          self.myitems = batch(
-  ...                 fulllist , count=3, name='nbs', request=self.request)
+  ...                 fulllist , count=3, name='nbs', request=self.request,
+  ...                 factory=lambda x: str(x))
   ...
   ...          self.batch = queryMultiAdapter(
   ...	              (self.context, self.myitems, self.request),
@@ -72,6 +73,7 @@ API
    - the request
    - the number of items per page
    - a name (optional)
+   - a factory that will be passed each item before each iteration (optional)
 
    The batch is an iterable object behaving like a list.
    It only gives access to the set of objects for the current page.
