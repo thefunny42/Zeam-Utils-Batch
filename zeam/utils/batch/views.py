@@ -12,6 +12,7 @@ from zope.traversing.interfaces import ITraversable
 
 from zeam.utils.batch.interfaces import IBatch, IBatching
 
+from urllib import urlencode
 
 class Batching(grok.MultiAdapter):
     """View object on batched elements.
@@ -35,12 +36,23 @@ class Batching(grok.MultiAdapter):
     def url(self):
         return absoluteURL(self.context, self.request)
 
-    def _baseLink(self, position):
+    @CachedProperty
+    def query_string(self):
+        params = self.request.form.copy()
+        for key in params.keys():
+            if key.startswith('bstart'):
+                del params[key]
+        return urlencode(params)
+
+    def _base_link(self, position):
         if not position:
-            return self.url
+            return "%s?%s" % (self.url, self.query_string,)
         if self._batch.name:
-            return "%s/++batch++%s+%d" % (self.url, self._batch.name, position)
-        return "%s/++batch++%d" % (self.url, position)
+            return "%s/++batch++%s+%d?%s" % (
+                self.url, self._batch.name, position, self.query_string)
+        return "%s/++batch++%d?%s" % (self.url, position, self.query_string)
+
+    _baseLink = _base_link
 
     def default_namespace(self):
         namespace = {}
@@ -70,7 +82,7 @@ class Batching(grok.MultiAdapter):
 
                 else:
                     ldots = False
-                    url_item = self._baseLink(pos)
+                    url_item = self._base_link(pos)
                     current_item = (pos == self._batch.start)
                     style = current_item and 'current' or None
                     yield dict(name=item, url=url_item, style=style)
@@ -80,21 +92,21 @@ class Batching(grok.MultiAdapter):
     def previous(self):
         previous = self._batch.previous
         avail = not (previous is None)
-        return avail and self._baseLink(previous) or None
+        return avail and self._base_link(previous) or None
 
     @property
     def next(self):
         next = self._batch.next
         avail = not (next is None)
-        return avail and self._baseLink(next) or None
+        return avail and self._base_link(next) or None
 
     @property
     def first(self):
-        return self._baseLink(self._batch.first)
+        return self._base_link(self._batch.first)
 
     @property
     def last(self):
-        return self._baseLink(self._batch.last)
+        return self._base_link(self._batch.last)
 
 
 class BatchPages(megrok.pagetemplate.PageTemplate):
