@@ -45,12 +45,17 @@ class Batching(grok.MultiAdapter):
         return urlencode(params)
 
     def _base_link(self, position):
+        def append_qs(url):
+            if self.query_string:
+                return "%s?%s" % (url, self.query_string,)
+            return url
+
         if not position:
-            return "%s?%s" % (self.url, self.query_string,)
+            return append_qs(self.url)
         if self._batch.name:
-            return "%s/++batch++%s+%d?%s" % (
-                self.url, self._batch.name, position, self.query_string)
-        return "%s/++batch++%d?%s" % (self.url, position, self.query_string)
+            return append_qs("%s/++batch++%s+%d" % (
+                self.url, self._batch.name, position))
+        return append_qs("%s/++batch++%d" % (self.url, position))
 
     _baseLink = _base_link
 
