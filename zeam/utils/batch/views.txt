@@ -136,6 +136,22 @@ If you put a name, it's inserted in the link::
   {'url': 'http://127.0.0.1/content/++batch++video+8', 'style': None, 'name': 3}
 
 
+The request form parameters are added to the base url of the batch pages.
+
+  >>> r = TestRequest()
+  >>> b = batch(list_long, start=4, count=4, name='video')
+  >>> r.form['extraparam'] = 1
+  >>> r.form['otherone'] = 'form<>data'
+  >>> view_with_params = queryMultiAdapter((content, b, r,), IBatching)
+
+Every parameter in request.form is url encoded and added to the batch URLs.
+
+  >>> view_with_params.first
+  'http://127.0.0.1/content?otherone=form%3C%3Edata&extraparam=1'
+  >>> view_with_params.last
+  'http://127.0.0.1/content/++batch++video+8?otherone=form%3C%3Edata&extraparam=1'
+
+
 Rendering
 ----------
 
