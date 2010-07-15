@@ -1,23 +1,25 @@
 Changelog
 =========
 
-0.6 (unreleased)
+0.6 (2010-07-15)
 ----------------
 
-* ...
+* Generated batch links can include other parameters in the link. That
+  let you batch form results for instance.
 
-0.5 (2009/11/17)
+
+0.5 (2009-11-17)
 ----------------
 
 * Batching views have two new properties: ``first`` and ``last`` which
   gives links to the first and last batch.
 
-0.4.1 (2009/10/16)
+0.4.1 (2009-10-16)
 ------------------
 
 * Corrected the broken distribution that was missing the i18n folder.
 
-0.4 (2009/10/16)
+0.4 (2009-10-16)
 ----------------
 
 .. note::
@@ -36,7 +38,7 @@ Changelog
 * Batch can be *disabled* with a count of 0,
 * Add translations for french, english and dutch.
 
-0.3 (2008/10/18)
+0.3 (2008-10-18)
 ----------------
 
 * Fix and add tests,
