@@ -1,6 +1,8 @@
 # Copyright Sylvain Viollon 2008 (c)
 # $Id: views.py 96 2008-10-20 22:25:04Z sylvain $
 
+from urllib import urlencode
+
 import megrok.pagetemplate
 import grokcore.component as grok
 
@@ -12,7 +14,6 @@ from zope.traversing.interfaces import ITraversable
 
 from zeam.utils.batch.interfaces import IBatch, IBatching
 
-from urllib import urlencode
 
 class Batching(grok.MultiAdapter):
     """View object on batched elements.

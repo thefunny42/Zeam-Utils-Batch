@@ -1,7 +1,7 @@
 # Copyright Sylvain Viollon 2008 (c)
 # $Id: batch.py 94 2008-10-20 22:20:34Z sylvain $
 
-from interfaces import IBatch
+from zeam.utils.batch.interfaces import IBatch
 from zope.interface import implements
 
 

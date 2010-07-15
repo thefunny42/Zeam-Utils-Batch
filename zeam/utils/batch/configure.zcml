@@ -2,10 +2,12 @@
    xmlns="http://namespaces.zope.org/zope"
    xmlns:i18n="http://namespaces.zope.org/i18n"
    xmlns:grok="http://namespaces.zope.org/grok">
- 
+
   <i18n:registerTranslations directory="i18n" />
+
   <include package="grokcore.component" file="meta.zcml" />
   <include package="megrok.pagetemplate" file="meta.zcml" />
+
   <grok:grok package="." />
 
 </configure>

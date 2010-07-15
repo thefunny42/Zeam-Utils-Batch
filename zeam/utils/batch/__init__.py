@@ -1,2 +1,3 @@
 
-from batch import batch
+from zeam.utils.batch.batch import batch
+
