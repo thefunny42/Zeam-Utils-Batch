@@ -4,7 +4,8 @@ Changelog
 0.7 (unreleased)
 ----------------
 
-* ...
+* Add a __len__ method do a batch object, which returns the number of
+  objects viewable via this current batch.
 
 0.6 (2010-07-15)
 ----------------
