@@ -17,13 +17,13 @@ class batchBaseIterator(object):
 
 
 class batchItemIterator(batchBaseIterator):
+    """Return the next object in the batch iterator.
+    """
 
     def __init__(self, context, factory=None):
         super(batchItemIterator, self).__init__(context)
         self.factory = factory
 
-    """Return the next object in the batch iterator.
-    """
     def next(self):
         try:
             def fetch():
@@ -74,9 +74,10 @@ class batch(object):
         self._data = data
         self._end = len(self._data)
         if not self.count or self.count > self._end:
-            self._max = self._end
+            # self._count is the effective count to use.
+            self._count = self._end
         else:
-            self._max = self.count
+            self._count = self.count
 
     def _getData(self):
         return self._data
@@ -84,7 +85,7 @@ class batch(object):
     data = property(_getData, _setData)
 
     def __getitem__(self, index):
-        if index < 0 or index >= self._max:
+        if index < 0 or index >= self._count:
             raise IndexError, "invalid index"
         return self.data[self.start + index]
 
@@ -98,6 +99,9 @@ class batch(object):
 
     def __iter__(self):
         return batchItemIterator(self, factory=self.factory)
+
+    def __len__(self):
+        return min(self._end - self.start, self._count)
 
     def all(self):
         return batchIndiceIterator(self)
