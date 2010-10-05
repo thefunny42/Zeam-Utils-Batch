@@ -152,24 +152,30 @@ Every parameter in request.form is url encoded and added to the batch URLs.
   'http://127.0.0.1/content/++batch++video+8?otherone=form%3C%3Edata&extraparam=1'
 
 
+However there is an option not to do this:
+
+  >>> view_with_params.keep_form_data
+  True
+  >>> view_with_params.keep_form_data = False
+  >>> view_with_params.first
+  'http://127.0.0.1/content'
+  >>> view_with_params.last
+  'http://127.0.0.1/content/++batch++video+8'
+
+
 Rendering
 ----------
 
   >>> print view()
   <div class="batchNav">
-    <a href="http://127.0.0.1/content">
+    <a href="http://127.0.0.1/content" class="previous">
       &lt; Previous</a>
-  <BLANKLINE>
     <a href="http://127.0.0.1/content">1</a>
-  <BLANKLINE>
-  <BLANKLINE>
     <a href="http://127.0.0.1/content/++batch++video+4"
        class="current">2</a>
-  <BLANKLINE>
     <a href="http://127.0.0.1/content/++batch++video+8">3</a>
-  <BLANKLINE>
-  <BLANKLINE>
-    <a href="http://127.0.0.1/content/++batch++video+8">
+    <a href="http://127.0.0.1/content/++batch++video+8"
+       class="next">
       Next &gt;
     </a>
   </div>

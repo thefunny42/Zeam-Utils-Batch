@@ -34,8 +34,8 @@ And now, you can define a view which use a batch, and render it::
   ...                 factory=lambda x: str(x))
   ...
   ...          self.batch = queryMultiAdapter(
-  ...	              (self.context, self.myitems, self.request),
-  ...          	      IBatching)()
+  ...                 (self.context, self.myitems, self.request),
+  ...                     IBatching)()
   ...
   ...     template = grok.PageTemplate('''
   ...     <tal:navigation tal:replace="structure view/batch" />
