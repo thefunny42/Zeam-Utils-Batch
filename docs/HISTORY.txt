@@ -1,11 +1,16 @@
 Changelog
 =========
 
-0.7 (unreleased)
+0.7 (2010-10-05)
 ----------------
 
 * Add a __len__ method do a batch object, which returns the number of
-  objects viewable via this current batch.
+  objects viewable via this current batch. Like this, it can be used
+  with tal:condition in templates.
+
+* An option keep_form_data on the view prevent to include posted form
+  data in generated links (sometime you want them, some other you
+  don't).
 
 0.6 (2010-07-15)
 ----------------
