@@ -23,7 +23,7 @@ setup(name='zeam.utils.batch',
       version=version,
       description="Generic Batch support for Zope",
       long_description= "%s\n\n%s" % (
-          open(os.path.join("zeam", "utils", "batch", "README.txt")).read(),
+          open(os.path.join("src", "zeam", "utils", "batch", "README.txt")).read(),
           open(os.path.join("docs", "HISTORY.txt")).read()
           ),
       classifiers=[
