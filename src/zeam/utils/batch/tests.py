@@ -1,29 +1,26 @@
 # Copyright Sylvain Viollon 2008 (c)
 # $Id: tests.py 85 2008-10-18 00:15:41Z sylvain $
 
-import os.path
 import unittest
 
 from zope.testing import doctest
-from zope.app.testing import functional
+from zope.app.wsgi.testlayer import BrowserLayer
+import zeam.utils.batch
 
-ftesting_zcml = os.path.join(os.path.dirname(__file__), 'ftesting.zcml')
-FunctionalLayer = functional.ZCMLLayer(
-    ftesting_zcml, __name__, 'FunctionalLayer', allow_teardown=True
-    )
+FunctionalLayer = BrowserLayer(zeam.utils.batch)
 
 
 def test_suite():
+    globs = dict(__name__="zeam.utils.batch",
+                 getRootFolder=FunctionalLayer.getRootFolder)
+    optionflags = (doctest.ELLIPSIS + doctest.NORMALIZE_WHITESPACE)
 
-    batchs = doctest.DocFileSuite('batch.txt',
-        optionflags=(doctest.ELLIPSIS + doctest.NORMALIZE_WHITESPACE),
-        )
-
-    readme = functional.FunctionalDocFileSuite('README.txt',
-        globs = dict(__name__="zeam.utils.batch"),
-        )
-
-    views = functional.FunctionalDocFileSuite('views.txt')
+    batchs = doctest.DocFileSuite(
+        'batch.txt', optionflags=optionflags, globs=globs)
+    readme = doctest.DocFileSuite(
+        'README.txt', optionflags=optionflags, globs=globs)
+    views = doctest.DocFileSuite(
+        'views.txt', optionflags=optionflags, globs=globs)
 
     views.layer = FunctionalLayer
     readme.layer = FunctionalLayer

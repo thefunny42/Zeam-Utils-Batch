@@ -4,18 +4,22 @@ import os
 version = '0.8dev'
 
 install_requires=[
-    'setuptools',
-    'zope.interface',
-    'zope.schema',
-    'zope.annotation',
-    'zope.traversing',
-    'zope.app.pagetemplate',
-    'grokcore.view',
     'grokcore.component',
-    'megrok.pagetemplate>=0.3',
+    'grokcore.view',
+    'megrok.pagetemplate>=0.7',
+    'setuptools',
+    'zope.cachedescriptors',
+    'zope.i18n',
+    'zope.interface',
+    'zope.publisher',
+    'zope.schema',
+    'zope.traversing',
     ]
 
 tests_requires = install_requires + [
+    'zope.app.wsgi',
+    'zope.testing',
+    'grokcore.view [test]'
     ],
 
 

@@ -198,8 +198,3 @@ Traversing
   >>> assert result is content
   >>> request.form.get('bstart_toto')
   '6'
-
-
-Tear down:
-
-  >>> sync()

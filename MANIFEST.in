@@ -1,2 +1,2 @@
-recursive-include zeam/utils/batch *.txt *.py *.zcml *.po *.mo *.pt
+recursive-include src *.mo *.po *.pot *.pt *.py *.txt *.zcml
 recursive-include docs *.txt
