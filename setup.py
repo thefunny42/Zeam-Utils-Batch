@@ -16,10 +16,6 @@ install_requires=[
     ]
 
 tests_requires = install_requires + [
-    'zope.testing',
-    'zope.app.testing',
-    'zope.app.securitypolicy',
-    'zope.app.zcmlfiles',
     ],
 
 
@@ -42,7 +38,8 @@ setup(name='zeam.utils.batch',
       author_email='thefunny@gmail.com',
       url='http://github.com/thefunny42/Zeam-Utils-Batch',
       license='BSD',
-      packages=find_packages(exclude=['ez_setup']),
+      package_dir={'': 'src'},
+      packages=find_packages('src'),
       namespace_packages=['zeam', 'zeam.utils'],
       include_package_data=True,
       zip_safe=False,
