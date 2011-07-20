@@ -4,7 +4,12 @@
    xmlns:browser="http://namespaces.zope.org/browser"
    i18n_domain="zope">
 
+  <!-- Load test environement -->
   <include package="grokcore.view" file="ftesting.zcml" />
+
+  <!-- Load i18n. This is not done in configure.zcml as this differ on Zope 2 -->
+  <include package="zope.i18n" />
+
   <include package="zeam.utils.batch" />
 
   <grok:grok package="zeam.utils.batch.tests" />
