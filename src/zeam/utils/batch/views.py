@@ -22,7 +22,7 @@ class Batching(grok.MultiAdapter):
     grok.implements(IBatching)
     grok.provides(IBatching)
 
-    keep_form_data = True
+    keep_query_string = True
 
     def __init__(self, context, batch, request):
         self.context = context
@@ -49,7 +49,7 @@ class Batching(grok.MultiAdapter):
 
     def _base_link(self, position):
         def append_qs(url):
-            if not self.keep_form_data:
+            if not self.keep_query_string:
                 return url
             if self.query_string:
                 return "%s?%s" % (url, self.query_string,)
@@ -62,15 +62,13 @@ class Batching(grok.MultiAdapter):
                 self.url, self._batch.name, position))
         return append_qs("%s/++batch++%d" % (self.url, position))
 
-    _baseLink = _base_link
-
     def default_namespace(self):
         namespace = {}
         namespace['context'] = self.context
         namespace['request'] = self.request
         namespace['batch'] = self.batch
-        namespace['next'] = self.next
-        namespace['previous'] = self.previous
+        namespace['next_url'] = self.next
+        namespace['previous_url'] = self.previous
         return namespace
 
     def namespace(self):
