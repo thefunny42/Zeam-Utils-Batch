@@ -154,9 +154,9 @@ Every parameter in request.form is url encoded and added to the batch URLs.
 
 However there is an option not to do this:
 
-  >>> view_with_params.keep_form_data
+  >>> view_with_params.keep_query_string
   True
-  >>> view_with_params.keep_form_data = False
+  >>> view_with_params.keep_query_string = False
   >>> view_with_params.first
   'http://127.0.0.1/content'
   >>> view_with_params.last
