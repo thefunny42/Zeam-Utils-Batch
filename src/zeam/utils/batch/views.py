@@ -67,6 +67,7 @@ class Batching(grok.MultiAdapter):
         namespace['context'] = self.context
         namespace['request'] = self.request
         namespace['batch'] = self.batch
+        namespace['batch_length'] = self._batch.batchLen()
         namespace['next_url'] = self.next
         namespace['previous_url'] = self.previous
         return namespace
