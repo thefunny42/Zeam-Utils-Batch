@@ -5,8 +5,8 @@ from zeam.utils.batch.interfaces import IBatch
 from zope.interface import implements
 
 
-class batchBaseIterator(object):
-    """An iterator on batch object.
+class BatchBaseIterator(object):
+    """An iterator on Batch object.
     """
     def __init__(self, context):
         self.context = context
@@ -16,33 +16,28 @@ class batchBaseIterator(object):
         return self
 
 
-class batchItemIterator(batchBaseIterator):
-    """Return the next object in the batch iterator.
+class BatchItemIterator(BatchBaseIterator):
+    """Return the next object in the Batch iterator.
     """
 
     def __init__(self, context, factory=None):
-        super(batchItemIterator, self).__init__(context)
+        super(BatchItemIterator, self).__init__(context)
         self.factory = factory
 
     def next(self):
         try:
-            def fetch():
-                return self.context[self.start]
-            if self.factory is not None:
-                elt = self.factory(fetch())
-            else:
-                elt = fetch()
+            element = self.context[self.start]
         except IndexError:
             raise StopIteration
         self.start += 1
-        return elt
+        return element
 
 
-class batchIndiceIterator(batchBaseIterator):
-    """Return the next indice in the batch iterator.
+class BatchIndiceIterator(BatchBaseIterator):
+    """Return the next indice in the Batch iterator.
     """
     def next(self):
-        last = self.context.count * self.context.batchLen()
+        last = self.context.count * self.context.batch_length()
         if not last:
             raise StopIteration
         if self.start < last:
@@ -52,14 +47,16 @@ class batchIndiceIterator(batchBaseIterator):
         raise StopIteration
 
 
-class batch(object):
+class Batch(object):
     """A simple batch object.
     """
     implements(IBatch)
 
-    def __init__(self, collection, start=0, count=10, name='',
-        request=None, factory=None):
-        if not (request is None):
+    def __init__(
+        self, collection,
+        start=0, count=10, name='', request=None, factory=None):
+
+        if request is not None:
             key = 'bstart'
             if name:
                 key += '_' + name
@@ -87,9 +84,12 @@ class batch(object):
     def __getitem__(self, index):
         if index < 0 or index >= self._count:
             raise IndexError, "invalid index"
-        return self.data[self.start + index]
+        element = self.data[self.start + index]
+        if element is not None:
+            return self.factory(element)
+        return element
 
-    def batchLen(self):
+    def batch_length(self):
         if not self.count:
             return 0
         last = self._end % self.count
@@ -98,13 +98,13 @@ class batch(object):
         return (self._end / self.count) + last
 
     def __iter__(self):
-        return batchItemIterator(self, factory=self.factory)
+        return BatchItemIterator(self, factory=self.factory)
 
     def __len__(self):
         return min(self._end - self.start, self._count)
 
     def all(self):
-        return batchIndiceIterator(self)
+        return BatchIndiceIterator(self)
 
     @property
     def first(self):
@@ -119,7 +119,7 @@ class batch(object):
 
     @property
     def last(self):
-        len = self.batchLen()
+        len = self.batch_length()
         if not len:
             return 0
         return (len - 1) * self.count
@@ -127,7 +127,7 @@ class batch(object):
     @property
     def next(self):
         next = self.start + self.count
-        if next >= (self.count * self.batchLen()):
+        if next >= (self.count * self.batch_length()):
             return None
         return next
 

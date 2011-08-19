@@ -15,10 +15,8 @@ from zope.traversing.interfaces import ITraversable
 from zeam.utils.batch.interfaces import IBatch, IBatching
 
 
-class Batching(grok.MultiAdapter):
-    """View object on batched elements.
-    """
-    grok.adapts(Interface, IBatch, IHTTPRequest)
+class BasicBatching(grok.MultiAdapter):
+    grok.baseclass()
     grok.implements(IBatching)
     grok.provides(IBatching)
 
@@ -47,7 +45,18 @@ class Batching(grok.MultiAdapter):
                 del params[key]
         return urlencode(params)
 
-    def _base_link(self, position):
+    def default_namespace(self):
+        namespace = {}
+        namespace['context'] = self.context
+        namespace['request'] = self.request
+        namespace['batch'] = self
+        return namespace
+
+    def namespace(self):
+        namespace = {}
+        return namespace
+
+    def _create_link(self, position):
         def append_qs(url):
             if not self.keep_query_string:
                 return url
@@ -58,26 +67,35 @@ class Batching(grok.MultiAdapter):
         if not position:
             return append_qs(self.url)
         if self._batch.name:
-            return append_qs("%s/++batch++%s+%d" % (
+            return append_qs("%s/++batch++%s+%s" % (
                 self.url, self._batch.name, position))
-        return append_qs("%s/++batch++%d" % (self.url, position))
-
-    def default_namespace(self):
-        namespace = {}
-        namespace['context'] = self.context
-        namespace['request'] = self.request
-        namespace['batch'] = self.batch
-        namespace['batch_length'] = self._batch.batchLen()
-        namespace['next_url'] = self.next
-        namespace['previous_url'] = self.previous
-        return namespace
-
-    def namespace(self):
-        return {}
+        return append_qs("%s/++batch++%s" % (self.url, position))
 
     @property
     def batch(self):
-        end = self._batch.batchLen()
+        raise NotImplementedError
+
+    @property
+    def batch_next(self):
+        raise NotImplementedError
+
+    @property
+    def batch_previous(self):
+        raise NotImplementedError
+
+
+class Batching(BasicBatching):
+    """View object on batched elements.
+    """
+    grok.adapts(Interface, IBatch, IHTTPRequest)
+
+    @property
+    def batch_length(self):
+        return self._batch.batch_length()
+
+    @property
+    def batch(self):
+        end = self._batch.batch_length()
         if end > 1:
             count = 0
             wanted = self._batch.start / self._batch.count
@@ -91,31 +109,31 @@ class Batching(grok.MultiAdapter):
 
                 else:
                     ldots = False
-                    url_item = self._base_link(pos)
+                    url_item = self._create_link(pos)
                     current_item = (pos == self._batch.start)
                     style = current_item and 'current' or None
                     yield dict(name=item, url=url_item, style=style)
                 count += 1
 
     @property
-    def previous(self):
+    def batch_previous(self):
         previous = self._batch.previous
         avail = not (previous is None)
-        return avail and self._base_link(previous) or None
+        return avail and dict(url=self._create_link(previous)) or None
 
     @property
-    def next(self):
+    def batch_next(self):
         next = self._batch.next
         avail = not (next is None)
-        return avail and self._base_link(next) or None
+        return avail and dict(url=self._create_link(next)) or None
 
     @property
-    def first(self):
-        return self._base_link(self._batch.first)
+    def batch_first(self):
+        return dict(url=self._create_link(self._batch.first))
 
     @property
-    def last(self):
-        return self._base_link(self._batch.last)
+    def batch_last(self):
+        return dict(url=self._create_link(self._batch.last))
 
 
 class BatchPages(megrok.pagetemplate.PageTemplate):

@@ -1,59 +1,64 @@
 # Copyright Sylvain Viollon 2008 (c)
 # $Id: interfaces.py 86 2008-10-18 00:20:21Z sylvain $
 
-from zope import schema
 from zope.interface import Interface, Attribute
 
 
-class IBatch(Interface):
+class IBatchBehavior(Interface):
+    """A basic batch behavior.
+    """
+    start = Attribute(
+        u"Starting indice over the batch")
+    count = Attribute(
+        u"Number of element in a batch")
+    data = Attribute(
+        u"Data to be batched (source)")
+    name = Attribute(
+        u"Name of the batch")
+    factory = Attribute(
+        u"Factory used to create element returned from the batch")
+
+    def __getitem__(index):
+        """Return item at index in the current batch view.
+        """
+
+    def __iter__():
+        """Returns an iterator on content in the current batch view.
+        """
+
+    def __len__():
+        """Returns number of items in the curretn batch views.
+        """
+
+
+class IBatch(IBatchBehavior):
     """A batch object.
     """
-    start = schema.Int(
-        title=u"Starting indice over the batch"
-        )
-
-    count = schema.Int(
-        title=u"Number of element in a batch"
-        )
-
-    data = schema.List(
-        title=u"Data to be batched"
-        )
-
-    name = schema.TextLine(
-        title=u"Name of the batch",
-        required=False,
-        default=u""
-        )
-
     first = Attribute("First element")
     last = Attribute("Last element")
     previous = Attribute("Previous index or None")
     next = Attribute("Next index or None")
-
-    def __getitem__(index):
-        """Return item at index.
-        """
-
-    def __iter__():
-        """Returns an iterator on batched content.
-        """
 
     def all():
         """Returns an interator on all (index, starting element) of the
         batch.
         """
 
-    def batchLen():
+    def batch_len():
         """Returns the number of available index in the batch.
         """
+
+class IDateBatch(IBatchBehavior):
+    """Batch element by date.
+    """
 
 
 class IBatching(Interface):
     """Used to render a batch.
     """
-    next = Attribute("Link to the next page or None")
-    previous = Attribute("Link to the previous page or None")
-    first = Attribute("Link to the first page")
-    last = Attribute("Link to the last page")
-    batch = Attribute("List of links to each page, which is current")
+    keep_query_string = Attribute(u"Should query string be kept")
+
+    batch = Attribute(u"Iterate through each batch navigation entry.")
+    batch_previous = Attribute(u"Previous batch/navigation entry")
+    # Cannot call batch_next next because of a Chameleon issue
+    batch_next = Attribute(u"Next batch/navigation entry")

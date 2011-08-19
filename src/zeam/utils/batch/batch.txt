@@ -6,9 +6,9 @@ Regular cases
 
 Batch object:
 
-  >>> from zeam.utils.batch.batch import batch
+  >>> from zeam.utils.batch.batch import Batch
   >>> l = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
-  >>> b = batch(l, count=4)
+  >>> b = Batch(l, count=4)
 
 This verify the provided interface:
 
@@ -42,7 +42,7 @@ You can have the number of items you can iter on:
 
 Test a batch with a start value :
 
-  >>> b = batch(l, start=4, count=4)
+  >>> b = Batch(l, start=4, count=4)
 
 And access on it :
 
@@ -94,7 +94,7 @@ Test batch methods :
 
 Test end of list iteration :
 
-  >>> b = batch(l, start=8, count=4)
+  >>> b = Batch(l, start=8, count=4)
   >>> for n in b:
   ...   print n
   9
@@ -107,7 +107,7 @@ In this case the length of the batch will be smaller:
 
 Test empty batch :
 
-  >>> b = batch([])
+  >>> b = Batch([])
   >>> for n in b.all():
   ...   print n
   >>> b.first
@@ -122,7 +122,7 @@ Special cases
 
 Batch with one element:
 
-  >>> b = batch(['a',], count=10)
+  >>> b = Batch(['a',], count=10)
   >>> for n in b.all():
   ...   print n
   (0, 1)
@@ -137,7 +137,7 @@ Batch with one element:
 
 A batch with a n element, n being count + 1:
 
-  >>> b = batch(['a', 'b', 'c', 'd', 'e'], count=2)
+  >>> b = Batch(['a', 'b', 'c', 'd', 'e'], count=2)
   >>> for n in b.all():
   ...   print n
   (0, 1)
@@ -152,7 +152,7 @@ A batch with a n element, n being count + 1:
 
 A batch that will be used by the iterator to wrapper each element
 
-  >>> b = batch(['a', 'b', 'c', 'd', 'e'], count=2, factory=lambda x: x*2)
+  >>> b = Batch(['a', 'b', 'c', 'd', 'e'], count=2, factory=lambda x: x*2)
   >>> list(b)
   ['aa', 'bb']
 

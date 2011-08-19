@@ -1,0 +1,19 @@
+<div class="batchNav" i18n:domain="zeam"
+     tal:define="batch_previous batch/batch_previous;
+                 batch_next batch/batch_next">
+  <a href="#" class="previous"
+     tal:attributes="href batch/batch_previous/url">
+    &lt; <tal:year tal:replace="batch_previous/year" />
+  </a>
+  <tal:repeat tal:repeat="item batch/batch">
+    <a href="#" class="#"
+       tal:attributes="href item/url; class item/style"
+       tal:condition="item/url"
+       tal:content="item/month">
+    </a>
+  </tal:repeat>
+  <a href="#" class="next"
+     tal:attributes="href batch/batch_next/url">
+    <tal:year tal:replace="batch_next/year" /> &gt;
+  </a>
+</div>

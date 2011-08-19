@@ -18,9 +18,9 @@ First we need a content to apply the batch on::
 
 After we need a batch::
 
-  >>> from zeam.utils.batch import batch
+  >>> from zeam.utils.batch import Batch
   >>> list_long = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
-  >>> b = batch(list_long, count=4)
+  >>> b = Batch(list_long, count=4)
 
 And a request::
 
@@ -59,7 +59,7 @@ We can links to first set of elements and the last:
 
 We set start to 4::
 
-  >>> b = batch(list_long, start=4, count=4)
+  >>> b = Batch(list_long, start=4, count=4)
   >>> view = queryMultiAdapter((content, b, request), IBatching)
   >>> view.previous
   'http://127.0.0.1/content'
@@ -78,7 +78,7 @@ We set start to 4::
 
 We set start to 8, last page::
 
-  >>> b = batch(list_long, start=8, count=4)
+  >>> b = Batch(list_long, start=8, count=4)
   >>> view = queryMultiAdapter((content, b, request), IBatching)
   >>> view.previous
   'http://127.0.0.1/content/++batch++4'
@@ -91,7 +91,7 @@ We set start to 8, last page::
 
 Now we have less than one page::
 
-  >>> b = batch(['a', 'b',], count=4)
+  >>> b = Batch(['a', 'b',], count=4)
   >>> view = queryMultiAdapter((content, b, request), IBatching)
   >>> view.previous
   >>> view.next
@@ -106,7 +106,7 @@ Now we have less than one page::
 The number of item is modulo to the size of the batch::
 
   >>> list_short = [1, 2, 3, 4, 5, 6, 7, 8]
-  >>> b = batch(list_short, start=4, count=4)
+  >>> b = Batch(list_short, start=4, count=4)
   >>> view = queryMultiAdapter((content, b, request), IBatching)
   >>> view.previous
   'http://127.0.0.1/content'
@@ -123,7 +123,7 @@ The number of item is modulo to the size of the batch::
 
 If you put a name, it's inserted in the link::
 
-  >>> b = batch(list_long, start=4, count=4, name='video')
+  >>> b = Batch(list_long, start=4, count=4, name='video')
   >>> view = queryMultiAdapter((content, b, request), IBatching)
   >>> view.previous
   'http://127.0.0.1/content'
@@ -139,7 +139,7 @@ If you put a name, it's inserted in the link::
 The request form parameters are added to the base url of the batch pages.
 
   >>> r = TestRequest()
-  >>> b = batch(list_long, start=4, count=4, name='video')
+  >>> b = Batch(list_long, start=4, count=4, name='video')
   >>> r.form['extraparam'] = 1
   >>> r.form['otherone'] = 'form<>data'
   >>> view_with_params = queryMultiAdapter((content, b, r,), IBatching)
