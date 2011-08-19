@@ -22,7 +22,7 @@ class DateBatch(object):
                 key += '_' + name
             if key in request.form:
                 try:
-                    start = datetime.fromtimestamp(int(request.form[key]))
+                    start = datetime.strptime(request.form[key], '%Y-%m')
                 except (ValueError, TypeError):
                     pass
         if start is None:

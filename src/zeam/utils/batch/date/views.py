@@ -25,7 +25,7 @@ class DateBatching(BasicBatching):
         month_names = self._get_month_names()
         current = self._batch.start
         for month in range(1, 13):
-            month_tms = datetime(current.year, month, 1).strftime("%s")
+            month_tms = datetime(current.year, month, 1).strftime("%Y-%m")
             url_item = self._create_link(month_tms)
             current_item = (month == current.month)
             style = current_item and 'current' or None
@@ -37,13 +37,13 @@ class DateBatching(BasicBatching):
     @property
     def batch_previous(self):
         current = self._batch.start
-        previous_tms = datetime(current.year - 1, 12, 1).strftime("%s")
+        previous_tms = datetime(current.year - 1, 12, 1).strftime("%Y-%m")
         return dict(year=current.year - 1, url=self._create_link(previous_tms))
 
     @property
     def batch_next(self):
         current = self._batch.start
-        next_tms = datetime(current.year + 1, 1, 1).strftime("%s")
+        next_tms = datetime(current.year + 1, 1, 1).strftime("%Y-%m")
         return dict(year=current.year + 1, url=self._create_link(next_tms))
 
 
