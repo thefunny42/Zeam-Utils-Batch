@@ -21,7 +21,10 @@ class DateBatch(object):
             if name:
                 key += '_' + name
             if key in request.form:
-                start = datetime.fromtimestamp(request.form[key])
+                try:
+                    start = datetime.fromtimestamp(int(request.form[key]))
+                except (ValueError, TypeError):
+                    pass
         if start is None:
             start = datetime.now()
         self.start = start

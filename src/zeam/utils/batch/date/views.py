@@ -11,7 +11,7 @@ from zeam.utils.batch.interfaces import IDateBatch
 from zeam.utils.batch.views import BasicBatching
 
 
-class Batching(BasicBatching):
+class DateBatching(BasicBatching):
     """View object on batched elements.
     """
     grok.adapts(Interface, IDateBatch, IHTTPRequest)
@@ -48,4 +48,4 @@ class Batching(BasicBatching):
 
 
 class BatchPages(megrok.pagetemplate.PageTemplate):
-    megrok.pagetemplate.view(Batching)
+    megrok.pagetemplate.view(DateBatching)

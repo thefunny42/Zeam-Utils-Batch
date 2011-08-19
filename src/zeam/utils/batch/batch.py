@@ -60,7 +60,10 @@ class Batch(object):
             key = 'bstart'
             if name:
                 key += '_' + name
-            start = int(request.form.get(key, 0))
+            try:
+                start = int(request.form.get(key, 0))
+            except (ValueError, TypeError):
+                pass
         self.start = start
         self.count = count
         self.data = collection
