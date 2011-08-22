@@ -41,9 +41,9 @@ So we can get the view::
 
 We are on the first page, start is 0::
 
-  >>> view.previous
-  >>> view.next
-  'http://127.0.0.1/content/++batch++4'
+  >>> view.batch_previous
+  >>> view.batch_next
+  {'url': 'http://127.0.0.1/content/++batch++4'}
   >>> for b in view.batch:
   ...    print b
   {'url': 'http://127.0.0.1/content', 'style': 'current', 'name': 1}
@@ -52,37 +52,37 @@ We are on the first page, start is 0::
 
 We can links to first set of elements and the last:
 
-  >>> view.first
-  'http://127.0.0.1/content'
-  >>> view.last
-  'http://127.0.0.1/content/++batch++8'
+  >>> view.batch_first
+  {'url': 'http://127.0.0.1/content'}
+  >>> view.batch_last
+  {'url': 'http://127.0.0.1/content/++batch++8'}
 
 We set start to 4::
 
   >>> b = Batch(list_long, start=4, count=4)
   >>> view = queryMultiAdapter((content, b, request), IBatching)
-  >>> view.previous
-  'http://127.0.0.1/content'
-  >>> view.next
-  'http://127.0.0.1/content/++batch++8'
+  >>> view.batch_previous
+  {'url': 'http://127.0.0.1/content'}
+  >>> view.batch_next
+  {'url': 'http://127.0.0.1/content/++batch++8'}
   >>> for b in view.batch:
   ...    print b
   {'url': 'http://127.0.0.1/content', 'style': None, 'name': 1}
   {'url': 'http://127.0.0.1/content/++batch++4', 'style': 'current', 'name': 2}
   {'url': 'http://127.0.0.1/content/++batch++8', 'style': None, 'name': 3}
 
-  >>> view.first
-  'http://127.0.0.1/content'
-  >>> view.last
-  'http://127.0.0.1/content/++batch++8'
+  >>> view.batch_first
+  {'url': 'http://127.0.0.1/content'}
+  >>> view.batch_last
+  {'url': 'http://127.0.0.1/content/++batch++8'}
 
 We set start to 8, last page::
 
   >>> b = Batch(list_long, start=8, count=4)
   >>> view = queryMultiAdapter((content, b, request), IBatching)
-  >>> view.previous
-  'http://127.0.0.1/content/++batch++4'
-  >>> view.next
+  >>> view.batch_previous
+  {'url': 'http://127.0.0.1/content/++batch++4'}
+  >>> view.batch_next
   >>> for b in view.batch:
   ...    print b
   {'url': 'http://127.0.0.1/content', 'style': None, 'name': 1}
@@ -93,42 +93,42 @@ Now we have less than one page::
 
   >>> b = Batch(['a', 'b',], count=4)
   >>> view = queryMultiAdapter((content, b, request), IBatching)
-  >>> view.previous
-  >>> view.next
+  >>> view.batch_previous
+  >>> view.batch_next
   >>> for b in view.batch:
   ...    print b
 
-  >>> view.first
-  'http://127.0.0.1/content'
-  >>> view.last
-  'http://127.0.0.1/content'
+  >>> view.batch_first
+  {'url': 'http://127.0.0.1/content'}
+  >>> view.batch_last
+  {'url': 'http://127.0.0.1/content'}
 
 The number of item is modulo to the size of the batch::
 
   >>> list_short = [1, 2, 3, 4, 5, 6, 7, 8]
   >>> b = Batch(list_short, start=4, count=4)
   >>> view = queryMultiAdapter((content, b, request), IBatching)
-  >>> view.previous
-  'http://127.0.0.1/content'
-  >>> view.next
+  >>> view.batch_previous
+  {'url': 'http://127.0.0.1/content'}
+  >>> view.batch_next
   >>> for b in view.batch:
   ...    print b
   {'url': 'http://127.0.0.1/content', 'style': None, 'name': 1}
   {'url': 'http://127.0.0.1/content/++batch++4', 'style': 'current', 'name': 2}
 
-  >>> view.first
-  'http://127.0.0.1/content'
-  >>> view.last
-  'http://127.0.0.1/content/++batch++4'
+  >>> view.batch_first
+  {'url': 'http://127.0.0.1/content'}
+  >>> view.batch_last
+  {'url': 'http://127.0.0.1/content/++batch++4'}
 
 If you put a name, it's inserted in the link::
 
   >>> b = Batch(list_long, start=4, count=4, name='video')
   >>> view = queryMultiAdapter((content, b, request), IBatching)
-  >>> view.previous
-  'http://127.0.0.1/content'
-  >>> view.next
-  'http://127.0.0.1/content/++batch++video+8'
+  >>> view.batch_previous
+  {'url': 'http://127.0.0.1/content'}
+  >>> view.batch_next
+  {'url': 'http://127.0.0.1/content/++batch++video+8'}
   >>> for b in view.batch:
   ...    print b
   {'url': 'http://127.0.0.1/content', 'style': None, 'name': 1}
@@ -146,21 +146,20 @@ The request form parameters are added to the base url of the batch pages.
 
 Every parameter in request.form is url encoded and added to the batch URLs.
 
-  >>> view_with_params.first
-  'http://127.0.0.1/content?otherone=form%3C%3Edata&extraparam=1'
-  >>> view_with_params.last
-  'http://127.0.0.1/content/++batch++video+8?otherone=form%3C%3Edata&extraparam=1'
-
+  >>> view_with_params.batch_first
+  {'url': 'http://127.0.0.1/content?otherone=form%3C%3Edata&extraparam=1'}
+  >>> view_with_params.batch_last
+  {'url': 'http://127.0.0.1/content/++batch++video+8?otherone=form%3C%3Edata&extraparam=1'}
 
 However there is an option not to do this:
 
   >>> view_with_params.keep_query_string
   True
   >>> view_with_params.keep_query_string = False
-  >>> view_with_params.first
-  'http://127.0.0.1/content'
-  >>> view_with_params.last
-  'http://127.0.0.1/content/++batch++video+8'
+  >>> view_with_params.batch_first
+  {'url': 'http://127.0.0.1/content'}
+  >>> view_with_params.batch_last
+  {'url': 'http://127.0.0.1/content/++batch++video+8'}
 
 
 Rendering

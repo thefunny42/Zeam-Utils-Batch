@@ -88,7 +88,7 @@ class Batch(object):
         if index < 0 or index >= self._count:
             raise IndexError, "invalid index"
         element = self.data[self.start + index]
-        if element is not None:
+        if self.factory is not None:
             return self.factory(element)
         return element
 

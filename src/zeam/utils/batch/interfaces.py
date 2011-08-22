@@ -44,7 +44,7 @@ class IBatch(IBatchBehavior):
         batch.
         """
 
-    def batch_len():
+    def batch_length():
         """Returns the number of available index in the batch.
         """
 
