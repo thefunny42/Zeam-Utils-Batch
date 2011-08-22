@@ -1,0 +1,23 @@
+Date Batch
+==========
+
+Regular cases
+-------------
+
+The batch object is built using a callable that return a list of items
+for the given day:
+
+  >>> from zeam.utils.batch.date.batch import DateBatch
+
+  >>> def getter(date):
+  ...     return ['a', 'b', 'c']
+
+  >>> b = DateBatch(getter)
+
+This verify the provided interface:
+
+  >>> from zope.interface.verify import verifyObject
+  >>> from zeam.utils.batch.interfaces import IDateBatch
+  >>> verifyObject(IDateBatch, b)
+  True
+

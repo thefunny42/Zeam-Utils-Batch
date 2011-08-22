@@ -30,6 +30,7 @@ class DateBatch(object):
         self.start = start
         self.name = name
         self.factory = factory
+        self.count = count
         self._setData(collection)
 
     def _setData(self, collection):

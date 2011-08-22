@@ -30,6 +30,3 @@ def test_suite():
     suite.addTest(batchs)
     suite.addTest(views)
     return suite
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='test_suite')
