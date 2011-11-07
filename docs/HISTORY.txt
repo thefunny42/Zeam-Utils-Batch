@@ -1,10 +1,19 @@
 Changelog
 =========
 
-0.8 (unreleased)
+1.0 (2011-11-07)
 ----------------
 
-* ...
+* Add a new batch component, ``DateBatch``, which is able to browser
+  period of years or months.
+
+* ``batch`` is renamed into ``Batch``. Methods have been renamed to
+  follow pep8 recommandations (i.e. ``batchLen`` into ``batch_length``).
+
+* Template have been reviewed: values are accessible via the template
+  variable ``batch`` insted of directly. This fix an issue of
+  compatiblity with Chameleon, where ``next`` could not be defined
+  (that's a Python built-in).
 
 0.7 (2010-10-05)
 ----------------

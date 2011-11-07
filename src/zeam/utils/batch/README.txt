@@ -15,7 +15,7 @@ on::
   >>> import grokcore.view as grok
   >>> from persistent import Persistent
   >>> from zope.component import queryMultiAdapter
-  >>> from zeam.utils.batch import batch
+  >>> from zeam.utils.batch import Batch
   >>> from zeam.utils.batch.interfaces import IBatching
 
   >>> class Content(Persistent):
@@ -29,7 +29,7 @@ And now, you can define a view which use a batch, and render it::
   ...
   ...     def update(self):
   ...          fulllist = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-  ...          self.myitems = batch(
+  ...          self.myitems = Batch(
   ...                 fulllist , count=3, name='nbs', request=self.request,
   ...                 factory=lambda x: str(x))
   ...
@@ -64,15 +64,19 @@ And this work::
 API
 ===
 
-``batch``
+``Batch``
    This object implements the batch.
 
    The batch object is instanciated with the following arguments:
 
    - a list of the objects to batch
+
    - the request
-   - the number of items per page
+
+   - the number of items per page (as count, default to 10)
+
    - a name (optional)
+
    - a factory that will be passed each item before each iteration (optional)
 
    The batch is an iterable object behaving like a list.
@@ -86,3 +90,14 @@ API
    method of this component will return a snippet of HTML containing
    basic controls for your batch: a next and previous link and a direct
    access to the other pages.
+
+``DateBatch``
+   This object implements a batch for date range. It follows the same
+   API than the regular batch, except:
+
+   - the list of objects is replaced by a callable that takes a
+     datetime value has parameter and return a list of objects for the
+     given periode
+
+   - the count option is changed to use either the ``BATCH_DAY`` or
+     ``BATCH_MONTH`` marker object.

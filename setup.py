@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '0.8dev'
+version = '1.0'
 
 install_requires=[
     'grokcore.component',
