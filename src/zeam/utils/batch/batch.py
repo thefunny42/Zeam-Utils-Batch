@@ -104,7 +104,7 @@ class Batch(object):
         return BatchItemIterator(self, factory=self.factory)
 
     def __len__(self):
-        return min(self._end - self.start, self._count)
+        return max(min(self._end - self.start, self._count), 0)
 
     def all(self):
         return BatchIndiceIterator(self)
