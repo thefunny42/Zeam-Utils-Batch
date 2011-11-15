@@ -1,6 +1,7 @@
 <div class="batchNav"
      tal:define="batch_previous batch/batch_previous;
                  batch_next batch/batch_next"
+     tal:condition="python: batch.batch_length > 1"
      i18n:domain="zeam">
   <a href="#" class="previous"
      tal:attributes="href batch_previous/url"

@@ -1,7 +1,7 @@
 # Copyright Sylvain Viollon 2008 (c)
 # $Id: batch.py 94 2008-10-20 22:20:34Z sylvain $
 
-from zeam.utils.batch.interfaces import IBatch
+from zeam.utils.batch.interfaces import IBatch, IActiveBatch
 from zope.interface import implements
 
 
@@ -134,3 +134,38 @@ class Batch(object):
             return None
         return next
 
+
+class ActiveBatch(object):
+    implements(IActiveBatch)
+
+    def __init__(
+        self, collection,
+        start=None, count=None, name='', request=None, factory=None):
+        self.start = start
+        self.name = name
+        self.factory = factory
+        self.count = count
+        self._setData(collection)
+
+    def _setData(self, collection):
+        self._data = list(collection(self.start))
+        self._count = len(self._data)
+
+    def _getData(self):
+        return self._data
+
+    data = property(_getData, _setData)
+
+    def __getitem__(self, index):
+        if index < 0 or index >= self._count:
+            raise IndexError("invalid index")
+        element = self._data[index]
+        if self.factory is not None:
+            return self.factory(element)
+        return element
+
+    def __iter__(self):
+        return BatchItemIterator(self, factory=self.factory)
+
+    def __len__(self):
+        return self._count

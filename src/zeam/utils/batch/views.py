@@ -72,6 +72,10 @@ class BasicBatching(grok.MultiAdapter):
         return append_qs("%s/++batch++%s" % (self.url, position))
 
     @property
+    def batch_length(self):
+        return self._batch.batch_length()
+
+    @property
     def batch(self):
         raise NotImplementedError
 
@@ -88,10 +92,6 @@ class Batching(BasicBatching):
     """View object on batched elements.
     """
     grok.adapts(Interface, IBatch, IHTTPRequest)
-
-    @property
-    def batch_length(self):
-        return self._batch.batch_length()
 
     @property
     def batch(self):

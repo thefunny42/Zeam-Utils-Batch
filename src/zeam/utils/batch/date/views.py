@@ -24,27 +24,27 @@ class DateBatching(BasicBatching):
     def batch(self):
         month_names = self._get_month_names()
         current = self._batch.start
-        for month in range(1, 13):
-            month_tms = datetime(current.year, month, 1).strftime("%Y-%m")
+        for date in self._batch.all():
+            month_tms = date.strftime("%Y-%m")
             url_item = self._create_link(month_tms)
-            current_item = (month == current.month)
+            current_item = (date.month == current.month)
             style = current_item and 'current' or None
             yield dict(year=current.year,
-                       month=month_names[month-1],
+                       month=month_names[date.month - 1],
                        url=url_item,
                        style=style)
 
     @property
     def batch_previous(self):
-        current = self._batch.start
-        previous_tms = datetime(current.year - 1, 12, 1).strftime("%Y-%m")
-        return dict(year=current.year - 1, url=self._create_link(previous_tms))
+        previous = self._batch.previous
+        previous_tms = previous.strftime("%Y-%m")
+        return dict(year=previous.year, url=self._create_link(previous_tms))
 
     @property
     def batch_next(self):
-        current = self._batch.start
-        next_tms = datetime(current.year + 1, 1, 1).strftime("%Y-%m")
-        return dict(year=current.year + 1, url=self._create_link(next_tms))
+        next = self._batch.next
+        next_tms = next.strftime("%Y-%m")
+        return dict(year=next.year, url=self._create_link(next_tms))
 
 
 class BatchPages(megrok.pagetemplate.PageTemplate):

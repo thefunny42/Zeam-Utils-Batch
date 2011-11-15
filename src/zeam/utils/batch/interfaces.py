@@ -17,6 +17,19 @@ class IBatchBehavior(Interface):
         u"Name of the batch")
     factory = Attribute(
         u"Factory used to create element returned from the batch")
+    previous = Attribute(
+        u"Previous index or None")
+    next = Attribute(
+        u"Next index or None")
+
+    def all():
+        """Returns an interator on all (index, starting element) of the
+        batch.
+        """
+
+    def batch_length():
+        """Returns the number of available index in the batch.
+        """
 
     def __getitem__(index):
         """Return item at index in the current batch view.
@@ -34,23 +47,25 @@ class IBatchBehavior(Interface):
 class IBatch(IBatchBehavior):
     """A batch object.
     """
-    first = Attribute("First element")
-    last = Attribute("Last element")
-    previous = Attribute("Previous index or None")
-    next = Attribute("Next index or None")
+    first = Attribute(u"First element")
+    last = Attribute(u"Last element")
 
-    def all():
-        """Returns an interator on all (index, starting element) of the
-        batch.
-        """
 
-    def batch_length():
-        """Returns the number of available index in the batch.
-        """
+class IActiveBatch(IBatchBehavior):
+    """An active batch call a callback in order to get items for the
+    current selection, instead of iterating over an existing sequence.
+    """
 
-class IDateBatch(IBatchBehavior):
+
+class IDateBatch(IActiveBatch):
     """Batch element by date.
     """
+
+
+class IAlphabeticalBatch(IActiveBatch, IBatch):
+    """Batch element by letter.
+    """
+    letters = Attribute(u"List of letters the batch will iterate through")
 
 
 class IBatching(Interface):

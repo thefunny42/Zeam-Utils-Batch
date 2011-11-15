@@ -2,7 +2,7 @@
 from datetime import datetime
 
 from zeam.utils.batch.interfaces import IDateBatch
-from zeam.utils.batch.batch import BatchItemIterator
+from zeam.utils.batch.batch import ActiveBatch
 from zope.interface import implements
 
 # Create a batch level for each ...
@@ -10,7 +10,7 @@ BATCH_DAY = object()
 BATCH_MONTH = object()
 
 
-class DateBatch(object):
+class DateBatch(ActiveBatch):
     implements(IDateBatch)
 
     def __init__(
@@ -27,31 +27,22 @@ class DateBatch(object):
                     pass
         if start is None:
             start = datetime.now()
-        self.start = start
-        self.name = name
-        self.factory = factory
-        self.count = count
-        self._setData(collection)
+        super(DateBatch, self).__init__(
+            collection,
+            start=start, count=count, name=name,
+            request=request, factory=factory)
 
-    def _setData(self, collection):
-        self._data = list(collection(self.start))
-        self._count = len(self._data)
+    def all(self):
+        for month in range(1, 13):
+            yield datetime(self.start.year, month, 1)
 
-    def _getData(self):
-        return self._data
+    def batch_length(self):
+        return 12
 
-    data = property(_getData, _setData)
+    @property
+    def previous(self):
+        return datetime(self.start.year - 1, 12, 1)
 
-    def __getitem__(self, index):
-        if index < 0 or index >= self._count:
-            raise IndexError, "invalid index"
-        element = self._data[index]
-        if self.factory is not None:
-            return self.factory(element)
-        return element
-
-    def __iter__(self):
-        return BatchItemIterator(self, factory=self.factory)
-
-    def __len__(self):
-        return self._count
+    @property
+    def next(self):
+        return datetime(self.start.year + 1, 12, 1)
