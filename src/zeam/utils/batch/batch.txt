@@ -40,11 +40,11 @@ You can have the number of items you can iter on:
   >>> len(b)
   4
 
-Test a batch with a start value :
+Test a batch with a start value:
 
   >>> b = Batch(l, start=4, count=4)
 
-And access on it :
+And access on it:
 
   >>> b[0]
   5
@@ -52,22 +52,18 @@ And access on it :
   8
   >>> b[4]
   Traceback (most recent call last):
-    File "<stdin>", line 1, in ?
-    File "utils/app/batch/batch.py", line 50, in __getitem__
-      raise IndexError, "invalid index"
+    ...
   IndexError: invalid index
 
 
-Negative index are forbidden :
+Negative index are forbidden:
 
   >>> b[-1]
   Traceback (most recent call last):
-    File "<stdin>", line 1, in ?
-    File "utils/app/batch/batch.py", line 50, in __getitem__
-      raise IndexError, "invalid index"
+    ...
   IndexError: invalid index
 
-And test iterator on this one :
+And test iterator on this one:
 
   >>> for n in b:
   ...   print n
@@ -78,7 +74,7 @@ And test iterator on this one :
   >>> len(b)
   4
 
-Test batch methods :
+Test batch methods:
 
   >>> b.first
   0
@@ -92,7 +88,7 @@ Test batch methods :
   >>> b.batch_length()
   3
 
-Test end of list iteration :
+Test end of list iteration:
 
   >>> b = Batch(l, start=8, count=4)
   >>> for n in b:
@@ -115,7 +111,7 @@ If start is after count, well you should see nothing:
   0
 
 
-Test empty batch :
+Test empty batch:
 
   >>> b = Batch([])
   >>> for n in b.all():
@@ -163,7 +159,7 @@ A batch with a n element, n being count + 1:
 Factory
 -------
 
-A batch that will be used by the iterator to wrapper each element
+A batch that will be used by the iterator to wrapper each element:
 
   >>> b = Batch(['a', 'b', 'c', 'd', 'e'], count=2, factory=lambda x: x*2)
   >>> list(b)

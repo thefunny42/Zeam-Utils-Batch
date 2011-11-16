@@ -45,4 +45,4 @@ class DateBatch(ActiveBatch):
 
     @property
     def next(self):
-        return datetime(self.start.year + 1, 12, 1)
+        return datetime(self.start.year + 1, 1, 1)

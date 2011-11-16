@@ -1,0 +1,141 @@
+Alphabetical Batch
+==================
+
+Regular cases
+-------------
+
+The batch object is built using a callable that return a list of items
+for the given key:
+
+  >>> from zeam.utils.batch.alphabetical.batch import AlphabeticalBatch
+
+  >>> def getter(date):
+  ...    return [1, 2, 3]
+
+  >>> b = AlphabeticalBatch(getter)
+
+This verify the provided Interface:
+
+  >>> from zope.interface.verify import verifyObject
+  >>> from zeam.utils.batch.interfaces import IAlphabeticalBatch
+  >>> verifyObject(IAlphabeticalBatch, b)
+  True
+
+You can iterate through the values, and get the number of those:
+
+  >>> for v in b:
+  ...    print v
+  1
+  2
+  3
+  >>> len(b)
+  3
+
+You can access directly a value:
+
+  >>> b[0]
+  1
+  >>> b[2]
+  3
+  >>> b[4]
+  Traceback (most recent call last):
+    ...
+  IndexError: invalid index
+
+
+There are regular batch methods.
+
+We gave no start, the first letter is the start:
+
+  >>> b.start
+  'A'
+
+The number of values will 26 (the number of letter in the alphabet):
+
+  >>> b.batch_length()
+  26
+
+Next and previous will default the next and previous letter, if available:
+
+  >>> b.next
+  'B'
+  >>> b.previous
+
+First and last are available:
+
+  >>> b.first
+  'A'
+  >>> b.last
+  'Z'
+
+And you can see all the letters available:
+
+  >>> for letter in b.all():
+  ...   print letter
+  A
+  B
+  C
+  D
+  E
+  F
+  G
+  H
+  I
+  J
+  K
+  L
+  M
+  N
+  O
+  P
+  Q
+  R
+  S
+  T
+  U
+  V
+  W
+  X
+  Y
+  Z
+
+
+Different alphabet
+------------------
+
+You can use different alphabet, and like a start value:
+
+  >>> import string
+
+  >>> b = AlphabeticalBatch(getter, start='5', letters=string.digits)
+
+In this case the batch methods will be differents:
+
+  >>> b.start
+  '5'
+  >>> b.batch_length()
+  10
+  >>> b.next
+  '6'
+  >>> b.previous
+  '4'
+  >>> b.first
+  '0'
+  >>> b.last
+  '9'
+
+And you can see all the months:
+
+  >>> for digit in b.all():
+  ...   print digit
+  0
+  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+

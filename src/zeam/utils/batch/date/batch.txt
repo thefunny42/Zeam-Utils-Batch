@@ -8,11 +8,12 @@ The batch object is built using a callable that return a list of items
 for the given day:
 
   >>> from zeam.utils.batch.date.batch import DateBatch
+  >>> from datetime import datetime
 
   >>> def getter(date):
-  ...     return ['a', 'b', 'c']
+  ...     return [1, 2, 3]
 
-  >>> b = DateBatch(getter)
+  >>> b = DateBatch(getter, start=datetime(2011, 11, 11))
 
 This verify the provided interface:
 
@@ -21,3 +22,80 @@ This verify the provided interface:
   >>> verifyObject(IDateBatch, b)
   True
 
+You can iterate through the values, and get the number of those:
+
+  >>> for v in b:
+  ...    print v
+  1
+  2
+  3
+  >>> len(b)
+  3
+
+You can access directly a value:
+
+  >>> b[0]
+  1
+  >>> b[2]
+  3
+  >>> b[4]
+  Traceback (most recent call last):
+    ...
+  IndexError: invalid index
+
+There are regular batch methods.
+
+The number of values will 12 (the number of months in a year):
+
+  >>> b.batch_length()
+  12
+
+Next and previous will gives the year before and after:
+
+  >>> b.next
+  datetime.datetime(2012, 1, 1, 0, 0)
+  >>> b.previous
+  datetime.datetime(2010, 12, 1, 0, 0)
+
+And you can see all the months:
+
+  >>> for month in b.all():
+  ...   print month
+  2011-01-01 00:00:00
+  2011-02-01 00:00:00
+  2011-03-01 00:00:00
+  2011-04-01 00:00:00
+  2011-05-01 00:00:00
+  2011-06-01 00:00:00
+  2011-07-01 00:00:00
+  2011-08-01 00:00:00
+  2011-09-01 00:00:00
+  2011-10-01 00:00:00
+  2011-11-01 00:00:00
+  2011-12-01 00:00:00
+
+
+Factory
+-------
+
+Factory option is supported as well. Each value will map with the
+factory when fetched:
+
+  >>> b = DateBatch(getter, start=datetime(2011, 11, 11), factory=lambda v: 2*v)
+
+  >>> for v in b:
+  ...    print v
+  2
+  4
+  6
+  >>> len(b)
+  3
+
+  >>> b[0]
+  2
+  >>> b[2]
+  6
+  >>> b[4]
+  Traceback (most recent call last):
+    ...
+  IndexError: invalid index
