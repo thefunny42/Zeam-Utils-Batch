@@ -105,6 +105,15 @@ In this case the length of the batch will be smaller:
   >>> len(b)
   2
 
+If start is after count, well you should see nothing:
+
+  >>> b = batch(l, start=120, count=4)
+  >>> for n in b:
+  ...   print n
+
+  >>> len(b)
+  0
+
 Test empty batch :
 
   >>> b = batch([])

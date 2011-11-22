@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.7.1 (2011-11-22)
+------------------
+
+* Ensure the __len__ of a batch never inferior to zero, even if start
+  is invalid.
+
 0.7 (2010-10-05)
 ----------------
 
