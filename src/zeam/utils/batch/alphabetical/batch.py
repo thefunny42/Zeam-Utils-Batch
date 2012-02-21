@@ -12,7 +12,7 @@ class AlphabeticalBatch(ActiveBatch):
     def __init__(
         self, collection,
         start=None, count=None, name='', request=None, factory=None,
-        letters=string.uppercase, default_all=False):
+        letters=string.uppercase, no_default=False):
         assert len(letters), 'need a list of letters to iterate through'
         if request is not None:
             key = 'bstart'
@@ -20,7 +20,7 @@ class AlphabeticalBatch(ActiveBatch):
                 key += '_' + name
             if key in request.form:
                 start = request.form[key]
-        if start is None and not default_all:
+        if start is None and not no_default:
             start = letters[0]
         super(AlphabeticalBatch, self).__init__(
             collection,
@@ -45,9 +45,10 @@ class AlphabeticalBatch(ActiveBatch):
     @property
     def previous(self):
         try:
-            index = self.letters.index(self.start)
-            if index:
-                return self.letters[index - 1]
+            if self.start:
+                index = self.letters.index(self.start)
+                if index:
+                    return self.letters[index - 1]
         except ValueError:
             pass
         return None
@@ -55,9 +56,10 @@ class AlphabeticalBatch(ActiveBatch):
     @property
     def next(self):
         try:
-            index = self.letters.index(self.start)
-            if index < len(self.letters) - 1:
-                return self.letters[index + 1]
+            if self.start:
+                index = self.letters.index(self.start)
+                if index < len(self.letters) - 1:
+                    return self.letters[index + 1]
         except ValueError:
             pass
         return None
