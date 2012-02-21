@@ -15,7 +15,8 @@ class DateBatch(ActiveBatch):
 
     def __init__(
         self, collection,
-        start=None, count=BATCH_MONTH, name='', request=None, factory=None):
+        start=None, count=BATCH_MONTH, name='', request=None, factory=None,
+        default_all=False):
         if request is not None:
             key = 'bstart'
             if name:
@@ -25,7 +26,7 @@ class DateBatch(ActiveBatch):
                     start = datetime.strptime(request.form[key], '%Y-%m')
                 except (ValueError, TypeError):
                     pass
-        if start is None:
+        if start is None and not default_all:
             start = datetime.now()
         super(DateBatch, self).__init__(
             collection,
