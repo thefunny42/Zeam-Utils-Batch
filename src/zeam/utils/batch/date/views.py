@@ -5,6 +5,7 @@ import grokcore.component as grok
 
 from zope.interface import Interface
 from zope.publisher.interfaces.http import IHTTPRequest
+from zope.cachedescriptors.property import Lazy
 
 from zeam.utils.batch.interfaces import IDateBatch
 from zeam.utils.batch.views import BasicBatching
@@ -33,17 +34,21 @@ class DateBatching(BasicBatching):
                        url=url_item,
                        style=style)
 
-    @property
+    @Lazy
     def batch_previous(self):
         previous = self._batch.previous
-        previous_tms = previous.strftime("%Y-%m")
-        return dict(year=previous.year, url=self._create_link(previous_tms))
+        if previous is not None:
+            previous_tms = previous.strftime("%Y-%m")
+            return dict(year=previous.year, url=self._create_link(previous_tms))
+        return {}
 
-    @property
+    @Lazy
     def batch_next(self):
         next = self._batch.next
-        next_tms = next.strftime("%Y-%m")
-        return dict(year=next.year, url=self._create_link(next_tms))
+        if next is not None:
+            next_tms = next.strftime("%Y-%m")
+            return dict(year=next.year, url=self._create_link(next_tms))
+        return {}
 
 
 class BatchPages(megrok.pagetemplate.PageTemplate):

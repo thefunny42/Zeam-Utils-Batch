@@ -60,6 +60,8 @@ class IActiveBatch(IBatchBehavior):
 class IDateBatch(IActiveBatch):
     """Batch element by date.
     """
+    min = Attribute(u"Minimal date where to stop the batch")
+    max = Attribute(u"Maximal date where to stop the batch")
 
 
 class IAlphabeticalBatch(IActiveBatch, IBatch):

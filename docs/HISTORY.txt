@@ -7,6 +7,9 @@ Changelog
 * Fix a bug when the ``start`` value is higher than the number of
   element in the batch in the regular batch.
 
+* Add two options ``min`` and ``max`` to the date batch in order to
+  define possible limits for it.
+
 1.0 (2011-11-07)
 ----------------
 

@@ -74,6 +74,58 @@ And you can see all the months:
   2011-11-01 00:00:00
   2011-12-01 00:00:00
 
+Minimal and maximal dates:
+
+  >>> c = DateBatch(getter,
+  ...               start=datetime(2011, 11, 11),
+  ...               min=datetime(2011, 4, 1),
+  ...               max=datetime(2012, 8, 30))
+  >>> c.previous
+  >>> c.next
+  datetime.datetime(2012, 1, 1, 0, 0)
+  >>> for month in c.all():
+  ...     print month
+  2011-04-01 00:00:00
+  2011-05-01 00:00:00
+  2011-06-01 00:00:00
+  2011-07-01 00:00:00
+  2011-08-01 00:00:00
+  2011-09-01 00:00:00
+  2011-10-01 00:00:00
+  2011-11-01 00:00:00
+  2011-12-01 00:00:00
+
+Change the start of the batch to the next one, test again limits:
+
+  >>> c.start = b.next
+  >>> c.previous
+  datetime.datetime(2011, 12, 1, 0, 0)
+  >>> c.next
+  >>> for month in c.all():
+  ...     print month
+  2012-01-01 00:00:00
+  2012-02-01 00:00:00
+  2012-03-01 00:00:00
+  2012-04-01 00:00:00
+  2012-05-01 00:00:00
+  2012-06-01 00:00:00
+  2012-07-01 00:00:00
+  2012-08-01 00:00:00
+
+Or out of the range:
+
+  >>> c.start = datetime(2001, 4, 1)
+  >>> c.previous
+  >>> c.next
+  >>> for month in c.all():
+  ...     print month
+
+  >>> c.start = datetime(2021, 4, 1)
+  >>> c.previous
+  >>> c.next
+  >>> for month in c.all():
+  ...     print month
+
 
 Factory
 -------
