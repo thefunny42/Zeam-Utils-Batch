@@ -1,8 +1,12 @@
 Changelog
 =========
 
-1.1 (unreleased)
+1.1 (2012-09-24)
 ----------------
+
+* Add a new type of batch, AlphabeticalBatch, that like the DateBatch,
+  and can be used to iterate through a fixed set of items like letters
+  or digits.
 
 * Fix a bug when the ``start`` value is higher than the number of
   element in the batch in the regular batch.

@@ -1,22 +1,22 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.1dev'
+version = '1.1'
 
 install_requires=[
     'grokcore.component',
     'grokcore.view',
-    'megrok.pagetemplate>=0.7',
+    'megrok.pagetemplate >=0.7',
     'setuptools',
     'zope.cachedescriptors',
     'zope.i18n',
     'zope.interface',
     'zope.publisher',
-    'zope.schema',
     'zope.traversing',
     ]
 
 tests_requires = install_requires + [
+    'zope.component',
     'zope.app.wsgi',
     'zope.testing',
     'grokcore.view [test]'
