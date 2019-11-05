@@ -29,7 +29,7 @@ Now test access:
   IndexError: invalid index
 
   >>> for n in b:
-  ...   print n
+  ...   print(n)
   1
   2
   3
@@ -66,7 +66,7 @@ Negative index are forbidden:
 And test iterator on this one:
 
   >>> for n in b:
-  ...   print n
+  ...   print(n)
   5
   6
   7
@@ -81,7 +81,7 @@ Test batch methods:
   >>> b.last
   8
   >>> for i in b.all():
-  ...   print i
+  ...   print(i)
   (0, 1)
   (4, 2)
   (8, 3)
@@ -92,7 +92,7 @@ Test end of list iteration:
 
   >>> b = Batch(l, start=8, count=4)
   >>> for n in b:
-  ...   print n
+  ...   print(n)
   9
   0
 
@@ -105,7 +105,7 @@ If start is after count, well you should see nothing:
 
   >>> b = Batch(l, start=120, count=4)
   >>> for n in b:
-  ...   print n
+  ...   print(n)
 
   >>> len(b)
   0
@@ -115,7 +115,7 @@ Test empty batch:
 
   >>> b = Batch([])
   >>> for n in b.all():
-  ...   print n
+  ...   print(n)
   >>> b.first
   0
   >>> b.last
@@ -130,7 +130,7 @@ Batch with one element:
 
   >>> b = Batch(['a',], count=10)
   >>> for n in b.all():
-  ...   print n
+  ...   print(n)
   (0, 1)
   >>> b.first
   0
@@ -145,7 +145,7 @@ A batch with a n element, n being count + 1:
 
   >>> b = Batch(['a', 'b', 'c', 'd', 'e'], count=2)
   >>> for n in b.all():
-  ...   print n
+  ...   print(n)
   (0, 1)
   (2, 2)
   (4, 3)

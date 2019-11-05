@@ -24,7 +24,7 @@ class BatchItemIterator(BatchBaseIterator):
         super(BatchItemIterator, self).__init__(context)
         self.factory = factory
 
-    def next(self):
+    def __next__(self):
         try:
             element = self.context[self.start]
         except IndexError:
@@ -36,14 +36,14 @@ class BatchItemIterator(BatchBaseIterator):
 class BatchIndiceIterator(BatchBaseIterator):
     """Return the next indice in the Batch iterator.
     """
-    def next(self):
+    def __next__(self):
         last = self.context.count * self.context.batch_length()
         if not last:
             raise StopIteration
         if self.start < last:
             value = self.start
             self.start += self.context.count
-            return (value, value / self.context.count + 1)
+            return (value, int(value / self.context.count) + 1)
         raise StopIteration
 
 
@@ -97,7 +97,7 @@ class Batch:
         last = self._end % self.count
         if last:
             last = 1
-        return (self._end / self.count) + last
+        return int((self._end / self.count)) + last
 
     def __iter__(self):
         return BatchItemIterator(self, factory=self.factory)

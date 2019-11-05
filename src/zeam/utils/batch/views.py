@@ -1,7 +1,10 @@
 # Copyright Sylvain Viollon 2008 (c)
 # $Id: views.py 96 2008-10-20 22:25:04Z sylvain $
 
-from urllib import urlencode
+try:
+    from urllib import urlencode
+except ImportError:
+    from urllib.parse import urlencode
 
 import megrok.pagetemplate
 import grokcore.component as grok

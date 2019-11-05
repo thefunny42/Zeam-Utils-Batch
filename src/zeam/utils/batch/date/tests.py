@@ -1,7 +1,5 @@
-
+import doctest
 import unittest
-
-from zope.testing import doctest
 from zeam.utils.batch.tests import FunctionalLayer
 
 

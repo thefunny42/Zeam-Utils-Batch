@@ -1,9 +1,5 @@
-# Copyright Sylvain Viollon 2008 (c)
-# $Id: tests.py 85 2008-10-18 00:15:41Z sylvain $
-
+import doctest
 import unittest
-
-from zope.testing import doctest
 from zope.app.wsgi.testlayer import BrowserLayer
 import zeam.utils.batch
 
