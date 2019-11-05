@@ -2,10 +2,10 @@
 # $Id: batch.py 94 2008-10-20 22:20:34Z sylvain $
 
 from zeam.utils.batch.interfaces import IBatch, IActiveBatch
-from zope.interface import implements
+from zope.interface import implementer
 
 
-class BatchBaseIterator(object):
+class BatchBaseIterator:
     """An iterator on Batch object.
     """
     def __init__(self, context):
@@ -47,11 +47,10 @@ class BatchIndiceIterator(BatchBaseIterator):
         raise StopIteration
 
 
-class Batch(object):
+@implementer(IBatch)
+class Batch:
     """A simple batch object.
     """
-    implements(IBatch)
-
     def __init__(
         self, collection,
         start=0, count=10, name='', request=None, factory=None):
@@ -86,7 +85,7 @@ class Batch(object):
 
     def __getitem__(self, index):
         if index < 0 or index >= self._count:
-            raise IndexError, "invalid index"
+            raise IndexError("invalid index")
         element = self.data[self.start + index]
         if self.factory is not None:
             return self.factory(element)
@@ -135,8 +134,8 @@ class Batch(object):
         return next
 
 
-class ActiveBatch(object):
-    implements(IActiveBatch)
+@implementer(IActiveBatch)
+class ActiveBatch:
 
     def __init__(
         self, collection,

@@ -3,16 +3,16 @@ import string
 
 from zeam.utils.batch.interfaces import IAlphabeticalBatch
 from zeam.utils.batch.batch import ActiveBatch
-from zope.interface import implements
+from zope.interface import implementer
 
 
+@implementer(IAlphabeticalBatch)
 class AlphabeticalBatch(ActiveBatch):
-    implements(IAlphabeticalBatch)
 
     def __init__(
         self, collection,
         start=None, count=None, name='', request=None, factory=None,
-        letters=string.uppercase, no_default=False):
+        letters=string.ascii_uppercase, no_default=False):
         assert len(letters), 'need a list of letters to iterate through'
         if request is not None:
             key = 'bstart'

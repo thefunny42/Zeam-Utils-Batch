@@ -3,15 +3,15 @@ from datetime import datetime
 
 from zeam.utils.batch.interfaces import IDateBatch
 from zeam.utils.batch.batch import ActiveBatch
-from zope.interface import implements
+from zope.interface import implementer
 
 # Create a batch level for each ...
 BATCH_DAY = object()
 BATCH_MONTH = object()
 
 
+@implementer(IDateBatch)
 class DateBatch(ActiveBatch):
-    implements(IDateBatch)
 
     def __init__(
         self, collection,
